@@ -17,7 +17,7 @@ import GoogleReviews from "./components/GoogleReviews.jsx";
 import Newsletter from "./components/NewsLetter.jsx";
 import Footer from "./assets/Components/Footer.jsx";
 import AboutUs from "./assets/Components/About.jsx";
-import Blog from "./assets/Components/Blog.jsx"; // Add this only if used in the alternate route
+import Blog from "./assets/Components/Blog.jsx";
 import Login from "./pages/Auth/Login";
 import Register from "./pages/Auth/Register.jsx";
 import AdminDashboard from "./pages/Admin/AdminDashboard";
@@ -33,6 +33,15 @@ import DetailedProduct from "./pages/DetailedProduct";
 import Cart from "./pages/Cart";
 import ForgotPasssword from "./pages/Auth/ForgotPassword.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
+import Blogs from "./pages/Blogs.jsx";
+import BlogDetail from "./pages/BlogDetail.jsx";
+import CreateBlog from "./pages/Admin/CreateBlog.jsx";
+import AdminBlogs from "./pages/Admin/Blogs.jsx";
+import HelpCenter from "./pages/HelpCenter.jsx";
+import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
+import RefundPolicy from "./pages/RefundPolicy.jsx";
+import TermsConditions from "./pages/TermsConditions.jsx";
+import Orders from "./pages/Orders.jsx";
 
 function App() {
   return (
@@ -62,7 +71,7 @@ function App() {
           />
 
           <Route
-            path="/alternate" // Optional: Add another route if needed
+            path="/alternate"
             element={
               <>
                 <HeroSection />
@@ -79,20 +88,25 @@ function App() {
           <Route path="/product/:slug" element={<DetailedProduct />} />
           <Route path="/search" element={<Search />} />
           <Route path="/cart" element={<Cart />} />
-
+          <Route path="/orders" element={<Orders />} />
           <Route path="/category" element={<Categories />} />
           <Route path="/category/:slug" element={<CategoryProduct />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/blogs" element={<Blogs />} />
+          <Route path="/blog/:slug" element={<BlogDetail />} />
+          <Route path="/help-center" element={<HelpCenter />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/refund-policy" element={<RefundPolicy />} />
+          <Route path="/terms-conditions" element={<TermsConditions />} />
           <Route path="/dashboard" element={<AdminRoute />}>
             <Route path="admin" element={<AdminDashboard />} />
             <Route path="admin/create-category" element={<CreateCategory />} />
             <Route path="admin/create-product" element={<CreateProduct />} />
-            <Route
-              path="admin/update-product/:slug"
-              element={<UpdateProduct />}
-            />
+            <Route path="admin/update-product/:slug" element={<UpdateProduct />} />
             <Route path="admin/products" element={<Products />} />
+            <Route path="admin/create-blog" element={<CreateBlog />} />
+            <Route path="admin/blogs" element={<AdminBlogs />} />
           </Route>
           <Route path="/forgotPassword" element={<ForgotPasssword />} />
           <Route path="*" element={<PageNotFound />} />

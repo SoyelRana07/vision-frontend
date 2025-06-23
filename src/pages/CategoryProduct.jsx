@@ -5,6 +5,7 @@ import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { Button, Modal } from "antd";
 import { useCart } from "../context/CartContext";
+import useCategory from "../hooks/useCategory";
 
 function CategoryProduct() {
   const params = useParams();
@@ -15,6 +16,7 @@ function CategoryProduct() {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [manualQty, setManualQty] = useState("");
   const [manualDiscount, setManualDiscount] = useState(0);
+  const categories = useCategory();
 
   useEffect(() => {
     if (params?.slug) getCateProd();
@@ -105,130 +107,161 @@ function CategoryProduct() {
 
   const bulkOptions = getBulkOptions();
 
+  // Find child categories of the current category
+  const childCategories = categories.filter(
+    (cat) => String(cat.parent) === String(category?._id)
+  );
+
   return (
-    <div className="h-[80vh]">
-      <h1 className="text-3xl text-center">category {category?.name}</h1>
-      <h1 className="text-xl text-center mt-5 mb-12">
-        Found {products?.length} results
-      </h1>
-      <div className="">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
-          {products?.map((p) => (
-            <Card
-              key={p._id}
-              hoverable
-              style={{ width: 300 }}
-              className="m-3 p-2"
-              cover={<img alt={p.name} src={p.photo[0].split(",")[0]} />}
-            >
-              <Meta title={p.name} description={p.description} />
-              <div className="card-name-price mt-3">
-                <h5 className="card-title">
-                  {p.price.toLocaleString("en-US", {
-                    style: "currency",
-                    currency: "INR",
-                  })}
-                </h5>
-              </div>
-              <div className="mt-3 flex">
-                <Button
-                  type="primary"
-                  onClick={() => navigate(`/product/${p.slug}`)}
-                >
-                  More Details
-                </Button>
-                <Button
-                  type="default"
-                  className="ml-2"
-                  onClick={() => {
-                    setSelectedProduct(p);
-                    setIsModalOpen(true);
-                  }}
-                >
-                  Add to Cart
-                </Button>
-              </div>
-            </Card>
-          ))}
-        </div>
-        {/* <div className="m-2 p-3">
-          {products && products.length < total && (
-            <button
-              className="btn btn-info"
-              onClick={(e) => {
-                e.preventDefault();
-                setPage(page + 1);
-              }}
-            >
-              {loading ? "loading..." : "loadmore"}
-            </button>
-          )}
-        </div> */}
-      </div>
-      <Modal
-        open={isModalOpen}
-        onCancel={() => setIsModalOpen(false)}
-        footer={null}
-        title="Select Quantity/Variant"
-      >
-        <div className="flex flex-col gap-4">
-          {/* Single piece option */}
-          {selectedProduct && (
-            <div className="flex items-center justify-between border p-3 rounded-lg mb-2">
-              <div>
-                <div className="font-semibold">{selectedProduct.name} (1 Pc)</div>
-                <span className="font-bold">{selectedProduct.price?.toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
-              </div>
-              <Button type="primary" onClick={() => handleAddToCart({ id: "single", label: selectedProduct.name + " (1 Pc)", price: selectedProduct.price, discount: 0, quantity: 1 })}>
-                Add
-              </Button>
-            </div>
-          )}
-          {/* Bulk options from admin */}
-          {bulkOptions.map((variant) => (
-            <div key={variant.id} className="flex items-center justify-between border p-3 rounded-lg mb-2">
-              <div>
-                <div className="font-semibold">{variant.label}</div>
-                <span className="text-red-500 font-bold mr-2">{variant.display}</span>
-                <span className="line-through text-gray-400">{variant.original}</span>
-                <span className="ml-2 text-green-600">{variant.discount}% OFF</span>
-              </div>
-              <Button type="primary" onClick={() => handleAddToCart(variant)}>
-                Add
-              </Button>
-            </div>
-          ))}
-          {/* Manual quantity entry */}
-          {selectedProduct && (
-            <div className="flex items-center gap-2 border p-3 rounded-lg mb-2">
-              <input
-                type="number"
-                min="1"
-                placeholder="Enter quantity (e.g. 7, 15, 100)"
-                className="border rounded p-1 w-1/2"
-                value={manualQty}
-                onChange={e => setManualQty(e.target.value)}
-              />
-              <Button type="primary" onClick={handleManualAdd}>Add</Button>
-              {manualQty && (() => {
-                const qty = parseInt(manualQty);
-                const found = selectedProduct.bulkDiscounts?.find((b) => Number(b.quantity) === qty);
-                if (qty > 0) {
-                  const discount = found ? found.discount : 0;
-                  const price = selectedProduct.price * qty * (1 - discount / 100);
-                  return (
-                    <span className="ml-2">
-                      {discount > 0 && <span className="text-green-600">{discount}% OFF</span>}
-                      <span className="ml-2 font-bold">{price.toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
-                    </span>
-                  );
+    <div className="min-h-[80vh] flex flex-col lg:flex-row relative gap-0 lg:gap-8">
+      {/* Main Content */}
+      <div className="flex-1 w-full">
+        <h1 className="text-3xl text-center">category {category?.name}</h1>
+        <h1 className="text-xl text-center mt-5 mb-12">
+          Found {products?.length} results
+        </h1>
+        <div className="">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+            {products?.map((p) => (
+              <Card
+                key={p._id}
+                hoverable
+                style={{ width: 300 }}
+                className="m-3 p-2"
+                cover={
+                  <div className="h-48 overflow-hidden">
+                    <img
+                      alt={p.name}
+                      src={p.photo[0].split(",")[0]}
+                      className="w-full h-full object-contain"
+                    />
+                  </div>
                 }
-                return null;
-              })()}
-            </div>
-          )}
+              >
+                <Meta title={p.name} description={p.description} />
+                <div className="card-name-price mt-3">
+                  <h5 className="card-title">
+                    {p.price.toLocaleString("en-US", {
+                      style: "currency",
+                      currency: "INR",
+                    })}
+                  </h5>
+                </div>
+                <div className="mt-3 flex">
+                  <Button
+                    type="primary"
+                    onClick={() => navigate(`/product/${p.slug}`)}
+                  >
+                    More Details
+                  </Button>
+                  <Button
+                    type="default"
+                    className="ml-2"
+                    onClick={() => {
+                      setSelectedProduct(p);
+                      setIsModalOpen(true);
+                    }}
+                  >
+                    Add to Cart
+                  </Button>
+                </div>
+              </Card>
+            ))}
+          </div>
         </div>
-      </Modal>
+        <Modal
+          open={isModalOpen}
+          onCancel={() => setIsModalOpen(false)}
+          footer={null}
+          title="Select Quantity/Variant"
+        >
+          <div className="flex flex-col gap-4">
+            {/* Single piece option */}
+            {selectedProduct && (
+              <div className="flex items-center justify-between border p-3 rounded-lg mb-2">
+                <div>
+                  <div className="font-semibold">{selectedProduct.name} (1 Pc)</div>
+                  <span className="font-bold">{selectedProduct.price?.toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
+                </div>
+                <Button type="primary" onClick={() => handleAddToCart({ id: "single", label: selectedProduct.name + " (1 Pc)", price: selectedProduct.price, discount: 0, quantity: 1 })}>
+                  Add
+                </Button>
+              </div>
+            )}
+            {/* Bulk options from admin */}
+            {bulkOptions.map((variant) => (
+              <div key={variant.id} className="flex items-center justify-between border p-3 rounded-lg mb-2">
+                <div>
+                  <div className="font-semibold">{variant.label}</div>
+                  <span className="text-red-500 font-bold mr-2">{variant.display}</span>
+                  <span className="line-through text-gray-400">{variant.original}</span>
+                  <span className="ml-2 text-green-600">{variant.discount}% OFF</span>
+                </div>
+                <Button type="primary" onClick={() => handleAddToCart(variant)}>
+                  Add
+                </Button>
+              </div>
+            ))}
+            {/* Manual quantity entry */}
+            {selectedProduct && (
+              <div className="flex items-center gap-2 border p-3 rounded-lg mb-2">
+                <input
+                  type="number"
+                  min="1"
+                  placeholder="Enter quantity (e.g. 7, 15, 100)"
+                  className="border rounded p-1 w-1/2"
+                  value={manualQty}
+                  onChange={e => setManualQty(e.target.value)}
+                />
+                <Button type="primary" onClick={handleManualAdd}>Add</Button>
+                {manualQty && (() => {
+                  const qty = parseInt(manualQty);
+                  const found = selectedProduct.bulkDiscounts?.find((b) => Number(b.quantity) === qty);
+                  if (qty > 0) {
+                    const discount = found ? found.discount : 0;
+                    const price = selectedProduct.price * qty * (1 - discount / 100);
+                    return (
+                      <span className="ml-2">
+                        {discount > 0 && <span className="text-green-600">{discount}% OFF</span>}
+                        <span className="ml-2 font-bold">{price.toLocaleString("en-US", { style: "currency", currency: "INR" })}</span>
+                      </span>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
+            )}
+          </div>
+        </Modal>
+      </div>
+      {/* Sidebar for child categories */}
+      {childCategories.length > 0 && (
+        <aside
+          className="w-full lg:w-64 mt-8 lg:mt-0 lg:sticky lg:top-24 self-start bg-white border border-gray-200 rounded-lg shadow-md p-4 h-fit
+            flex-shrink-0
+            sm:max-w-md
+            mx-auto
+            "
+        >
+          {/* Divider for mobile/tablet */}
+          <div className="block lg:hidden mb-4">
+            <hr className="border-t border-gray-200" />
+          </div>
+          <h2 className="text-lg font-bold mb-4 text-gray-800 text-center lg:text-left">Subcategories</h2>
+          <ul className="space-y-2">
+            {childCategories.map((cat) => (
+              <li key={cat._id}>
+                <a
+                  href={`/category/${cat.slug}`}
+                  className="block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 hover:text-blue-700 transition text-center lg:text-left"
+                >
+                  {cat.name}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
     </div>
   );
 }

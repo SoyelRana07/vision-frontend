@@ -51,7 +51,7 @@ function NewsLetter() {
         <img
           src={logo}
           alt="Brand Logo"
-          className="h-52 w-auto object-contain shadow-lg"
+          className="h-52 w-auto object-contain"
         />
       </div>
 

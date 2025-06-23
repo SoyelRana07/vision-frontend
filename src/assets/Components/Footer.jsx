@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import logo from '../Pictures/plotter_files/logo.png';
 
 const Footer = () => {
@@ -24,11 +25,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-red-500">My Account</a></li>
-              <li><a href="#" className="hover:text-red-500">My Orders</a></li>
-              <li><a href="#" className="hover:text-red-500">Wishlist</a></li>
-              <li><a href="#" className="hover:text-red-500">Account Security</a></li>
-              <li><a href="#" className="hover:text-red-500">Track My Orders</a></li>
+              <li><Link to="/login" className="hover:text-red-500">My Account</Link></li>
+              <li><Link to="/orders" className="hover:text-red-500">My Orders</Link></li>
+              <li><Link to="/login" className="hover:text-red-500">Account Security</Link></li>
+              <li><Link to="/orders" className="hover:text-red-500">Track My Orders</Link></li>
             </ul>
           </div>
 
@@ -36,10 +36,10 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4">Support</h3>
             <ul className="space-y-2">
-              <li><a href="#" className="hover:text-red-500">Help Center</a></li>
-              <li><a href="#" className="hover:text-red-500">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-red-500">Refund Policy</a></li>
-              <li><a href="#" className="hover:text-red-500">Terms & Conditions</a></li>
+              <li><Link to="/help-center" className="hover:text-red-500">Help Center</Link></li>
+              <li><Link to="/privacy-policy" className="hover:text-red-500">Privacy Policy</Link></li>
+              <li><Link to="/refund-policy" className="hover:text-red-500">Refund Policy</Link></li>
+              <li><Link to="/terms-conditions" className="hover:text-red-500">Terms & Conditions</Link></li>
             </ul>
           </div>
 
@@ -49,7 +49,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>📞 <a href="tel:+918100280400" className="hover:text-red-500">+91 8100280400</a></li>
               <li>📱 <a href="tel:+919831463859" className="hover:text-red-500">+91 9831463859</a></li>
-              <li>✉️ <a href="mailto:sales@visiongifting.com" className="hover:text-red-500">sales@visiongifting.com</a></li>
+              <li>✉️ <a href="mailto:sales@visionmediaonline.in" className="hover:text-red-500">sales@visionmediaonline.in</a></li>
             </ul>
             <div className="mt-4">
               <h4 className="font-semibold">Head Office</h4>
@@ -84,11 +84,10 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-red-500">My Account</a></li>
-                <li><a href="#" className="hover:text-red-500">My Orders</a></li>
-                <li><a href="#" className="hover:text-red-500">Wishlist</a></li>
-                <li><a href="#" className="hover:text-red-500">Account Security</a></li>
-                <li><a href="#" className="hover:text-red-500">Track My Orders</a></li>
+                <li><Link to="/login" className="hover:text-red-500">My Account</Link></li>
+                <li><Link to="/orders" className="hover:text-red-500">My Orders</Link></li>
+                <li><Link to="/login" className="hover:text-red-500">Account Security</Link></li>
+                <li><Link to="/orders" className="hover:text-red-500">Track My Orders</Link></li>
               </ul>
             </div>
 
@@ -96,10 +95,10 @@ const Footer = () => {
             <div>
               <h3 className="text-lg font-semibold mb-4">Support</h3>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-red-500">Help Center</a></li>
-                <li><a href="#" className="hover:text-red-500">Privacy Policy</a></li>
-                <li><a href="#" className="hover:text-red-500">Refund Policy</a></li>
-                <li><a href="#" className="hover:text-red-500">Terms & Conditions</a></li>
+                <li><Link to="/help-center" className="hover:text-red-500">Help Center</Link></li>
+                <li><Link to="/privacy-policy" className="hover:text-red-500">Privacy Policy</Link></li>
+                <li><Link to="/refund-policy" className="hover:text-red-500">Refund Policy</Link></li>
+                <li><Link to="/terms-conditions" className="hover:text-red-500">Terms & Conditions</Link></li>
               </ul>
             </div>
           </div>
@@ -110,7 +109,7 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>📞 <a href="tel:+918100280400" className="hover:text-red-500">+91 8100280400</a></li>
               <li>📱 <a href="tel:+919831463859" className="hover:text-red-500">+91 9831463859</a></li>
-              <li>✉️ <a href="mailto:sales@visiongifting.com" className="hover:text-red-500">sales@visionmediaonline.in</a></li>
+              <li>✉️ <a href="mailto:sales@visionmediaonline.in" className="hover:text-red-500">sales@visionmediaonline.in</a></li>
             </ul>
           </div>
 

@@ -68,7 +68,7 @@ const HeroSection = () => {
             <img
               src={slides[currentSlide].image}
               alt={slides[currentSlide].title}
-              className="w-full h-[200px] md:h-[500px] p-5 object-cover"
+              className="w-full h-[200px] md:h-[500px] object-cover"
             />
             {/* Text Overlay */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
@@ -96,9 +96,8 @@ const HeroSection = () => {
         {slides.map((_, index) => (
           <div
             key={index}
-            className={`h-3 w-3 rounded-full ${
-              currentSlide === index ? "bg-red-600" : "bg-gray-400"
-            }`}
+            className={`h-3 w-3 rounded-full ${currentSlide === index ? "bg-red-600" : "bg-gray-400"
+              }`}
           ></div>
         ))}
       </div>

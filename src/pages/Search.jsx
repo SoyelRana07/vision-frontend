@@ -103,7 +103,15 @@ function Search() {
               hoverable
               style={{ width: 300 }}
               className="m-3 p-2"
-              cover={<img alt={p.name} src={p.photo[0].split(",")[0]} />}
+              cover={
+                <div className="h-48 overflow-hidden">
+                  <img
+                    alt={p.name}
+                    src={p.photo[0].split(",")[0]}
+                    className="w-full h-full object-contain"
+                  />
+                </div>
+              }
             >
               <Meta title={p.name} description={p.description} />
               <div className="card-name-price mt-3">
