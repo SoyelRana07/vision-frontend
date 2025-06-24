@@ -27,7 +27,7 @@ function UpdateProduct() {
   const getSingleProduct = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8080/api/v1/product/get-product/${params.slug}`,
+        `https://vision-backend-lx5i.onrender.com/api/v1/product/get-product/${params.slug}`,
         {
           headers: { Authorization: `Bearer ${auth?.token}` },
         }
@@ -54,7 +54,7 @@ function UpdateProduct() {
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        "http://localhost:8080/api/v1/category/get-category",
+        "https://vision-backend-lx5i.onrender.com/api/v1/category/get-category",
         {
           headers: {
             Authorization: auth?.token,
@@ -95,7 +95,7 @@ function UpdateProduct() {
       productData.append("bulkDiscounts", JSON.stringify(bulkDiscounts.filter(b => b.quantity && b.discount)));
 
       const { data } = await axios.put(
-        `http://localhost:8080/api/v1/product/update-product/${id}`,
+        `https://vision-backend-lx5i.onrender.com/api/v1/product/update-product/${id}`,
         productData,
         {
           headers: {
@@ -123,7 +123,7 @@ function UpdateProduct() {
       let answer = window.prompt("Are you sure, you want to delete");
       if (!answer) return;
       const { data } = await axios.delete(
-        `http://localhost:8080/api/v1/product/delete-product/${id}`,
+        `https://vision-backend-lx5i.onrender.com/api/v1/product/delete-product/${id}`,
         {
           headers: {
             Authorization: auth?.token,

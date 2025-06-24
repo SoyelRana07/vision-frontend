@@ -21,7 +21,7 @@ function Cart() {
     try {
       const amountInPaise = totalAmount * 100; // Convert to paise
       const res = await axios.post(
-        "http://localhost:8080/api/v1/payment/order",
+        "https://vision-backend-lx5i.onrender.com/api/v1/payment/order",
         { amount: amountInPaise },
         {
           headers: {
@@ -56,7 +56,7 @@ function Cart() {
           }
 
           const verificationRes = await axios.post(
-            "http://localhost:8080/api/v1/payment/verify",
+            "https://vision-backend-lx5i.onrender.com/api/v1/payment/verify",
             response // Send full response object
           );
 
@@ -95,9 +95,8 @@ function Cart() {
     <div className="h-full">
       <div className="text-center my-10">
         <h1 className="text-3xl font-bold">
-          {`Hello ${auth?.user?.name ? auth.user.name : ""}, you have ${
-            cart?.length
-          } Products in your cart`}
+          {`Hello ${auth?.user?.name ? auth.user.name : ""}, you have ${cart?.length
+            } Products in your cart`}
         </h1>
         {!auth?.token && (
           <button
