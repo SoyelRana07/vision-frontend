@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate, useParams, Link } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { Button, Modal } from "antd";
@@ -251,12 +251,12 @@ function CategoryProduct() {
           <ul className="space-y-2">
             {childCategories.map((cat) => (
               <li key={cat._id}>
-                <Link
-                  to={`/category/${cat.slug}`}
+                <a
+                  href={`/category/${cat.slug}`}
                   className="block px-3 py-2 rounded hover:bg-gray-100 text-gray-700 hover:text-blue-700 transition text-center lg:text-left"
                 >
                   {cat.name}
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
