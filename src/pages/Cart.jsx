@@ -11,18 +11,47 @@ function Cart() {
     useCart();
   const navigate = useNavigate();
 
-  // Calculate total amount in paise (Razorpay expects amount in smallest currency unit)
+  // Calculate total amount (assume price is in paise, convert to INR for HDFC)
   const totalAmount = cart.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
 
-  const handlePayment = async () => {
+  // HDFC Payment Handler
+  const handleHdfcPayment = async () => {
     try {
-      const amountInPaise = totalAmount * 100; // Convert to paise
+      console.log("Clicked HDFC Pay");
+      if (!auth?.user) {
+        toast.error("Please login to proceed with payment");
+        navigate("/login");
+        return;
+      }
+      if (cart.length === 0) {
+        toast.error("Your cart is empty");
+        return;
+      }
+      // Generate unique customer_id
+      let customer_id = auth.user._id || auth.user.email || ("guest_" + Math.random().toString(36).substring(2, 10));
+      // Generate unique orderId <= 21 chars
+      const ts = Date.now().toString(36);
+      const rand = Math.random().toString(36).substring(2, 6);
+      const orderId = ("ORD" + ts + rand).substring(0, 21);
+      // Prepare customer details
+      const customer = {
+        customer_id,
+        customer_email: auth.user.email,
+        customer_phone: auth.user.phone || "", // fallback if phone not present
+        customer_name: auth.user.name,
+      };
+      // Calculate total amount (HDFC expects in INR, not paise)
+      const amount = totalAmount; // Send as INR, do not convert
+      // Set your backend callback URL as the return_url so the payment gateway POSTs to the backend, not the frontend
+      // The backend will then redirect to the frontend callback page with order_id as a query param
+      const redirectUrl = "http://localhost:8080/api/v1/payment/hdfc/callback";
+      // Call backend to initiate HDFC payment
       const res = await axios.post(
-        "https://vision-backend-lx5i.onrender.com/api/v1/payment/order",
-        { amount: amountInPaise },
+        "http://localhost:8080/api/v1/payment/hdfc/initiate",
+        { amount, customer, orderId, redirectUrl },
         {
           headers: {
             Authorization: auth?.token,
@@ -30,52 +59,17 @@ function Cart() {
           },
         }
       );
-      console.log(res);
-      if (res.data.data && res.data.data.id) {
-        handlePaymentVerify(res.data);
+      console.log("HDFC response:", res.data);
+      const paymentUrl = res.data.payment_url || (res.data.session && res.data.session.payment_links && res.data.session.payment_links.web);
+      if (paymentUrl) {
+        window.location.href = paymentUrl;
+      } else {
+        toast.error("Failed to get payment URL");
       }
     } catch (error) {
-      console.error("Order creation error:", error);
-      toast.error("Payment initiation failed");
+      console.error("HDFC Payment initiation error:", error);
+      toast.error("HDFC Payment initiation failed");
     }
-  };
-
-  const handlePaymentVerify = (orderData) => {
-    const options = {
-      key: "rzp_test_JXUogzUXrfcpxh",
-      amount: orderData.amount,
-      currency: "INR",
-      name: "Vision Media Pvt Ltd",
-      order_id: orderData.id,
-      handler: async (response) => {
-        console.log(response);
-        try {
-          // Verify all parameters exist
-          if (!response.razorpay_payment_id || !response.razorpay_order_id) {
-            throw new Error("Incomplete payment response");
-          }
-
-          const verificationRes = await axios.post(
-            "https://vision-backend-lx5i.onrender.com/api/v1/payment/verify",
-            response // Send full response object
-          );
-
-          if (verificationRes.data.success) {
-            // Clear cart
-            localStorage.removeItem("cart");
-            setCart([]);
-            navigate("/orders");
-          }
-        } catch (err) {
-          console.error("Verification failed:", err);
-          toast.error("Payment verification failed");
-        }
-      },
-      theme: { color: "#3399cc" },
-    };
-
-    const rzp = new window.Razorpay(options);
-    rzp.open();
   };
 
   const handleCartItem = (pid) => {
@@ -185,11 +179,11 @@ function Cart() {
             </p>
 
             <button
-              onClick={handlePayment}
-              className="p-3 m-2 bg-red-400 text-xl rounded-md w-full font-semibold font-sans"
+              onClick={handleHdfcPayment}
+              className="p-3 m-2 bg-blue-600 text-xl rounded-md w-full font-semibold font-sans text-white"
               disabled={cart.length === 0}
             >
-              Proceed to Buy
+              Proceed to Pay (HDFC)
             </button>
             {auth?.user?.address ? (
               <div className="mt-4">

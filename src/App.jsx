@@ -42,6 +42,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy.jsx";
 import RefundPolicy from "./pages/RefundPolicy.jsx";
 import TermsConditions from "./pages/TermsConditions.jsx";
 import Orders from "./pages/Orders.jsx";
+import PaymentCallback from "./pages/PaymentCallback.jsx";
 
 function App() {
   return (
@@ -109,6 +110,7 @@ function App() {
             <Route path="admin/blogs" element={<AdminBlogs />} />
           </Route>
           <Route path="/forgotPassword" element={<ForgotPasssword />} />
+          <Route path="/payment/callback" element={<PaymentCallback />} />
           <Route path="*" element={<PageNotFound />} />
         </Routes>
       </div>
