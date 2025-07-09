@@ -67,6 +67,7 @@ function App() {
                 <Slider2 />
                 <GoogleReviews />
                 <Newsletter />
+
               </>
             }
           />

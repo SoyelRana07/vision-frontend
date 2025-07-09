@@ -17,7 +17,7 @@ const Footer = () => {
               className="w-32 bg-white"
             />
             <p className="text-gray-400">
-              Welcome to Vision Media, Your One-Stop Destination For High-Quality Sublimation Products.
+              Welcome to VISION MEDIA (CALCUTTA) PRIVATE LIMITED, Your One-Stop Destination For High-Quality Sublimation Products.
             </p>
           </div>
 
@@ -127,8 +127,8 @@ const Footer = () => {
 
       {/* Copyright */}
       <div className="bg-red-700 text-center py-3">
-        <p>&copy; Copyright 1988–2023 | All Rights Reserved.</p>
-        <p>Made with ❤️ By Your Creator</p>
+        <p>&copy; Copyright 1988–2025 | All Rights Reserved.</p>
+
       </div>
     </footer>
   );
