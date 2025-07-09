@@ -49,9 +49,9 @@ function PaymentCallback() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-[60vh]">
-            <h1 className={`text-3xl font-bold mb-4 ${status === "success" ? "text-green-600" : "text-red-600"}`}>
+            {/* <h1 className={`text-3xl font-bold mb-4 ${status === "success" ? "text-green-600" : "text-red-600"}`}>
                 {status === "success" ? "Payment Success" : "Payment Failed"}
-            </h1>
+            </h1> */}
             <p className="text-lg mb-4">{message}</p>
             {status === "success" && isLoading && (
                 <div className="mb-6 flex items-center justify-center">
