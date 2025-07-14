@@ -74,10 +74,14 @@ function CategoryProduct() {
   };
 
   const handleAddToCart = (variant) => {
+    // Always use per-unit price (after discount if any) and correct quantity
+    const perUnitPrice = variant.discount
+      ? Math.round(selectedProduct.price * (1 - variant.discount / 100))
+      : selectedProduct.price;
     const productToAdd = {
       ...selectedProduct,
       variant: variant.id,
-      price: variant.discount ? Math.round(variant.price * (1 - variant.discount / 100)) : variant.price,
+      price: perUnitPrice,
       quantity: variant.quantity || 1,
       bulkDiscount: variant.discount || 0,
     };
@@ -93,13 +97,15 @@ function CategoryProduct() {
     if (!qty || qty < 1) return;
     const found = selectedProduct.bulkDiscounts?.find((b) => Number(b.quantity) === qty);
     const discount = found ? found.discount : 0;
-    const price = selectedProduct.price * qty * (1 - discount / 100);
+    const perUnitPrice = discount
+      ? Math.round(selectedProduct.price * (1 - discount / 100))
+      : selectedProduct.price;
     handleAddToCart({
       id: `manual_${qty}`,
       label: `${selectedProduct.name} (x${qty})`,
-      price: selectedProduct.price * qty,
+      price: perUnitPrice,
       discount,
-      display: price.toLocaleString("en-US", { style: "currency", currency: "INR" }),
+      display: (perUnitPrice * qty).toLocaleString("en-US", { style: "currency", currency: "INR" }),
       original: (selectedProduct.price * qty).toLocaleString("en-US", { style: "currency", currency: "INR" }),
       quantity: qty,
     });
@@ -219,7 +225,10 @@ function CategoryProduct() {
                   const found = selectedProduct.bulkDiscounts?.find((b) => Number(b.quantity) === qty);
                   if (qty > 0) {
                     const discount = found ? found.discount : 0;
-                    const price = selectedProduct.price * qty * (1 - discount / 100);
+                    const perUnitPrice = discount
+                      ? Math.round(selectedProduct.price * (1 - discount / 100))
+                      : selectedProduct.price;
+                    const price = perUnitPrice * qty;
                     return (
                       <span className="ml-2">
                         {discount > 0 && <span className="text-green-600">{discount}% OFF</span>}
