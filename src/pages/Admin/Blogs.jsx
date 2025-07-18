@@ -16,7 +16,7 @@ function AdminBlogs() {
     const getAllBlogs = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get("http://localhost:8080/api/v1/blog/get-blogs");
+            const { data } = await axios.get("https://vision-backend-lx5i.onrender.com/api/v1/blog/get-blogs");
             if (data.success) {
                 setBlogs(data.blogs);
             }
@@ -32,7 +32,7 @@ function AdminBlogs() {
     const handleDelete = async (id) => {
         try {
             const { data } = await axios.delete(
-                `http://localhost:8080/api/v1/blog/delete-blog/${id}`,
+                `https://vision-backend-lx5i.onrender.com/api/v1/blog/delete-blog/${id}`,
                 {
                     headers: {
                         Authorization: auth?.token,

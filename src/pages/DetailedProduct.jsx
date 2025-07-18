@@ -21,7 +21,7 @@ function DetailedProduct() {
   const getProducts = async () => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8080/api/v1/product/get-product/${params.slug}`
+        `https://vision-backend-lx5i.onrender.com/api/v1/product/get-product/${params.slug}`
       );
 
       if (data?.product) {
@@ -42,7 +42,7 @@ function DetailedProduct() {
   const getRelatedProducts = async (pid, cid) => {
     try {
       const { data } = await axios.get(
-        `http://localhost:8080/api/v1/product/related-product/${pid}/${cid}`
+        `https://vision-backend-lx5i.onrender.com/api/v1/product/related-product/${pid}/${cid}`
       );
 
       if (data?.products) {
@@ -250,7 +250,7 @@ function DetailedProduct() {
                 cover={
                   <img
                     alt={p.name}
-                    src={`http://localhost:8080/api/v1/product/product-photo/${p._id}`}
+                    src={`https://vision-backend-lx5i.onrender.com/api/v1/product/product-photo/${p._id}`}
                   />
                 }
               >

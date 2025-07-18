@@ -12,7 +12,7 @@ export default function PrivateRoute() {
     const authCheck = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:8080/api/v1/auth/user-auth",
+          "https://vision-backend-lx5i.onrender.com/api/v1/auth/user-auth",
           {
             headers: {
               Authorization: auth?.token,

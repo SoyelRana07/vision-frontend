@@ -39,7 +39,7 @@ function CreateBlog() {
             const thumbnailUrl = Array.isArray(thumbnail) ? thumbnail[0] : thumbnail;
 
             const { data } = await axios.post(
-                "http://localhost:8080/api/v1/blog/create-blog",
+                "https://vision-backend-lx5i.onrender.com/api/v1/blog/create-blog",
                 {
                     title,
                     content,
