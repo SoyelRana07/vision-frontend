@@ -12,7 +12,7 @@ function Products() {
   const getProducts = async () => {
     try {
       const { data } = await axios.get(
-        "https://vision-backend-lx5i.onrender.com/api/v1/product/get-products",
+        "http://localhost:8080/api/v1/product/get-products",
         {
           headers: {
             Authorization: `Bearer ${auth?.token}`,

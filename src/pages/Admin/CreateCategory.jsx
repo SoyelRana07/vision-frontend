@@ -21,7 +21,7 @@ function CreateCategory() {
     e.preventDefault();
     try {
       const { data } = await axios.post(
-        "https://vision-backend-lx5i.onrender.com/api/v1/category/create-category",
+        "http://localhost:8080/api/v1/category/create-category",
         { name, parent },
         {
           headers: {
@@ -46,7 +46,7 @@ function CreateCategory() {
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        "https://vision-backend-lx5i.onrender.com/api/v1/category/get-category",
+        "http://localhost:8080/api/v1/category/get-category",
         {
           headers: {
             Authorization: auth?.token,
@@ -70,7 +70,7 @@ function CreateCategory() {
     e.preventDefault();
     try {
       const { data } = await axios.put(
-        `https://vision-backend-lx5i.onrender.com/api/v1/category/update-category/${selected._id}`,
+        `http://localhost:8080/api/v1/category/update-category/${selected._id}`,
         { name: updatedName, parent: editParent },
         {
           headers: {
@@ -97,7 +97,7 @@ function CreateCategory() {
   const handleDelete = async (categoryId) => {
     try {
       const { data } = await axios.delete(
-        `https://vision-backend-lx5i.onrender.com/api/v1/category/delete-category/${categoryId}`,
+        `http://localhost:8080/api/v1/category/delete-category/${categoryId}`,
         {
           headers: {
             Authorization: auth?.token,
