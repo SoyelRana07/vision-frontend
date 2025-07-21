@@ -10,6 +10,7 @@ function Cart() {
   const { cart, increaseQuantity, decreaseQuantity, removeFromCart, setCart } =
     useCart();
   const navigate = useNavigate();
+  const [paymentUrl, setPaymentUrl] = useState(null);
 
   // Calculate total amount (assume price is in paise, convert to INR for HDFC)
   const totalAmount = cart.reduce(
