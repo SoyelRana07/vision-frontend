@@ -90,9 +90,9 @@ function Orders() {
                                         </div>
                                         <div className="text-right">
                                             <span className={`px-3 py-1 rounded-full text-sm font-medium ${order.status === 'Processing' ? 'bg-yellow-100 text-yellow-800' :
-                                                    order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
-                                                        order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
-                                                            'bg-gray-100 text-gray-800'
+                                                order.status === 'Shipped' ? 'bg-blue-100 text-blue-800' :
+                                                    order.status === 'Delivered' ? 'bg-green-100 text-green-800' :
+                                                        'bg-gray-100 text-gray-800'
                                                 }`}>
                                                 {order.status || 'Pending'}
                                             </span>
