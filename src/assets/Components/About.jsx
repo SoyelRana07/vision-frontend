@@ -12,7 +12,7 @@ function About() {
       <div className="flex flex-col lg:flex-row items-center lg:space-x-12">
         <div className="flex-1 mb-8 lg:mb-0">
           <img
-            src="https://visiongifting.com/wp-content/uploads/2023/08/VISION-MEDIA-RAW-LOGO-1-1-1024x648-1.png" // Replace with your company logo or image
+            src="D:/soyel-visionWeb/Frontend/src/assets/VISION MEDIA RAW LOGO 1.png" // Replace with your company logo or image
             alt="Company Logo"
             className="w-full h-auto rounded-lg shadow-md"
           />
