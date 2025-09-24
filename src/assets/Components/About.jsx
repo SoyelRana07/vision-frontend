@@ -1,4 +1,5 @@
 import React from "react";
+import logo from "../../assets/logo.png";
 
 function About() {
   return (
@@ -12,7 +13,7 @@ function About() {
       <div className="flex flex-col lg:flex-row items-center lg:space-x-12">
         <div className="flex-1 mb-8 lg:mb-0">
           <img
-            src="D:/soyel-visionWeb/Frontend/src/assets/VISION MEDIA RAW LOGO 1.png" // Replace with your company logo or image
+            src={logo}
             alt="Company Logo"
             className="w-full h-auto rounded-lg shadow-md"
           />

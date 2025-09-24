@@ -1,5 +1,5 @@
 import React from "react";
-import logo from "../assets/VISION MEDIA RAW LOGO 1.png";
+import logo from "../assets/logo.png";
 
 function NewsLetter() {
   return (
