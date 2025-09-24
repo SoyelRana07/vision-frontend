@@ -44,6 +44,10 @@ function Header() {
     }, 2000); // 2 seconds
   };
 
+  const handleDropdownToggle = () => {
+    setDropdownOpen((prev) => !prev);
+  };
+
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm w-full">
       {/* Top Contact Bar */}
@@ -109,10 +113,21 @@ function Header() {
               onMouseEnter={handleMouseEnter}
               onMouseLeave={handleMouseLeave}
             >
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors duration-200">
+              <button
+                className="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors duration-200"
+                onClick={handleDropdownToggle}
+              >
                 <span className="text-gray-700">Hello, </span>
                 <span className="font-semibold text-red-600">{auth.user.name}</span>
-                <span className="text-gray-500">▼</span>
+                {/* Triangle rotates based on dropdownOpen */}
+                <span
+                  className={`text-gray-500 transition-transform duration-200 ${
+                    dropdownOpen ? "rotate-180" : ""
+                  }`}
+                  style={{ display: "inline-block" }}
+                >
+                  ▼
+                </span>
               </button>
               {dropdownOpen && (
                 <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
