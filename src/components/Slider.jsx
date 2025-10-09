@@ -61,8 +61,7 @@ function Slider({ images }) {
   // Drag to pan when zoomed
   const handleMouseDown = (e) => {
     if (!isZoomed || !containerRef.current) return;
-    // Only start dragging if it's not a click on the image itself
-    if (e.target === imageRef.current) return;
+    e.preventDefault();
     setIsDragging(true);
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     scrollStartRef.current = {
@@ -219,7 +218,7 @@ function Slider({ images }) {
               <div
                 ref={containerRef}
                 className={`w-full h-full ${isZoomed
-                  ? "overflow-auto cursor-grab active:cursor-grabbing"
+                  ? "overflow-auto"
                   : "flex justify-center items-center"
                   }`}
                 onClick={(e) => e.stopPropagation()}
@@ -230,7 +229,10 @@ function Slider({ images }) {
                 onWheel={handleWheel}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
-                style={{ userSelect: 'none' }}
+                style={{
+                  userSelect: 'none',
+                  cursor: isDragging ? 'grabbing' : (isZoomed ? 'grab' : 'default')
+                }}
               >
                 <img
                   ref={imageRef}
@@ -246,8 +248,10 @@ function Slider({ images }) {
                     transformOrigin: 'center center',
                     transition: isZoomed ? 'none' : 'transform 0.2s ease',
                     userSelect: 'none',
-                    pointerEvents: 'auto'
+                    pointerEvents: 'auto',
+                    cursor: isZoomed ? 'grab' : 'zoom-in'
                   }}
+                  draggable={false}
                   onClick={(e) => {
                     e.stopPropagation();
                     if (zoomLevel === 1) {
@@ -261,7 +265,10 @@ function Slider({ images }) {
                       setTimeout(centerScrollToMiddle, 0);
                     }
                   }}
-                  onMouseDown={(e) => e.stopPropagation()}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
                 />
               </div>
 
