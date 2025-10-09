@@ -91,7 +91,10 @@ function Slider({ images }) {
       e.preventDefault();
       e.stopPropagation();
     }
-    setIsDragging(false);
+    // Add a small delay to prevent click from firing immediately after drag
+    setTimeout(() => {
+      setIsDragging(false);
+    }, 10);
   };
 
   // Zoom functions
@@ -259,9 +262,8 @@ function Slider({ images }) {
                   draggable={false}
                   onClick={(e) => {
                     e.stopPropagation();
-                    // Only toggle zoom if it wasn't a drag (quick click)
-                    const clickDuration = Date.now() - dragStartTime;
-                    if (clickDuration < 200 && !isDragging) {
+                    // Only toggle zoom if we're not currently dragging
+                    if (!isDragging) {
                       if (zoomLevel === 1) {
                         setZoomLevel(1.25);
                         setIsZoomed(true);
