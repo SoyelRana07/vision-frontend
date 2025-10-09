@@ -144,7 +144,7 @@ function CategoryProduct() {
                   </div>
                 }
               >
-                <Meta title={p.name} description={p.description} />
+                <Meta title={p.name} description={null} />
                 <div className="card-name-price mt-3">
                   <h5 className="card-title">
                     {p.price.toLocaleString("en-US", {
