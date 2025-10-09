@@ -57,6 +57,18 @@ function DetailedProduct() {
     if (params.slug) getProducts();
   }, [params.slug]);
 
+  useEffect(() => {
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isModalOpen]);
+
   if (!prod) {
     return <div>Loading...</div>; // Or any other loading indicator
   }
