@@ -3,11 +3,17 @@ import React, { useState, useEffect } from "react";
 function Slider({ images }) {
   console.log("image array", images);
   const [image, setImage] = useState(null);
+  const [isZoomed, setIsZoomed] = useState(false);
 
-  // Disable body scroll when modal opens
+  // Disable body scroll when modal opens and manage focus
   useEffect(() => {
     if (image !== null) {
       document.body.style.overflow = "hidden";
+      // Focus the modal for accessibility
+      const modal = document.querySelector('[data-modal="image-viewer"]');
+      if (modal) {
+        modal.focus();
+      }
     } else {
       document.body.style.overflow = "unset";
     }
@@ -35,8 +41,10 @@ function Slider({ images }) {
   const sliderbtn = (dir) => {
     const len = images.length;
     if (dir === "left") {
+      setIsZoomed(false);
       setImage((prevImage) => (prevImage - 1 + len) % len);
     } else {
+      setIsZoomed(false);
       setImage((prevImage) => (prevImage + 1) % len);
     }
   };
@@ -45,39 +53,68 @@ function Slider({ images }) {
     <div className="flex">
       <div className="relative">
         {image !== null && (
-          <div className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-between p-5 z-50">
+          <div
+            className="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-between p-5 z-50"
+            data-modal="image-viewer"
+            tabIndex={-1}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Image viewer"
+            onClick={(e) => {
+              // Close modal when clicking on backdrop (not on image or controls)
+              if (e.target === e.currentTarget) {
+                setIsZoomed(false);
+                setImage(null);
+              }
+            }}
+          >
             {/* Left arrow */}
-            <div
-              className="cursor-pointer p-5 text-white text-4xl select-none hover:bg-white/10 rounded-full"
+            <button
+              className="cursor-pointer p-5 text-white text-4xl select-none hover:bg-white/10 rounded-full transition-colors border-none bg-transparent"
               onClick={() => sliderbtn("left")}
+              aria-label="Previous image"
             >
               ←
-            </div>
+            </button>
 
-            {/* Full-screen image */}
-            <div className="flex-grow flex justify-center items-center md:p-10 md:m-10">
+            {/* Full-screen image with zoom and scroll */}
+            <div
+              className={`flex-grow md:p-10 md:m-10 ${isZoomed ? "overflow-auto" : "flex justify-center items-center"
+                }`}
+              onClick={(e) => e.stopPropagation()}
+            >
               <img
                 src={images[image]}
-                className="max-w-full max-h-full object-contain"
                 alt="Full Screen"
+                className={
+                  isZoomed
+                    ? "max-w-none max-h-none w-auto h-auto cursor-zoom-out"
+                    : "max-w-full max-h-full object-contain cursor-zoom-in"
+                }
+                onClick={() => setIsZoomed((z) => !z)}
               />
             </div>
 
             {/* Close button */}
-            <div
-              className="absolute top-5 right-5 text-white text-4xl cursor-pointer p-2 hover:bg-white/10 rounded-full select-none"
-              onClick={() => setImage(null)}
+            <button
+              className="absolute top-5 right-5 text-white text-4xl cursor-pointer p-2 hover:bg-white/10 rounded-full select-none transition-colors border-none bg-transparent"
+              onClick={() => {
+                setIsZoomed(false);
+                setImage(null);
+              }}
+              aria-label="Close image viewer"
             >
               ✕
-            </div>
+            </button>
 
             {/* Right arrow */}
-            <div
-              className="cursor-pointer p-5 text-white text-4xl select-none hover:bg-white/10 rounded-full"
+            <button
+              className="cursor-pointer p-5 text-white text-4xl select-none hover:bg-white/10 rounded-full transition-colors border-none bg-transparent"
               onClick={() => sliderbtn("right")}
+              aria-label="Next image"
             >
               →
-            </div>
+            </button>
 
             {/* Image counter */}
             <div className="absolute bottom-5 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-3 py-1 rounded">
