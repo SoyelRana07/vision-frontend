@@ -165,89 +165,83 @@ function Slider({ images }) {
               }
             }}
           >
-            {/* Small centered window */}
-            <div className="relative bg-white rounded-lg shadow-2xl max-w-[80vw] max-h-[70vh] w-[600px] h-[500px] flex flex-col">
-              {/* Header with close button */}
-              <div className="flex justify-between items-center p-4 border-b">
-                <h3 className="text-lg font-semibold text-gray-800">Image Viewer</h3>
-                <button
-                  className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors border-none bg-transparent"
-                  onClick={() => {
-                    setIsZoomed(false);
-                    setZoomLevel(1);
-                    setImage(null);
+            {/* Image window - no background, just image */}
+            <div className="relative max-w-[85vw] max-h-[75vh] w-[700px] h-[600px] flex items-center justify-center">
+              {/* Close button */}
+              <button
+                className="absolute top-2 right-2 z-20 text-white text-3xl cursor-pointer p-2 hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
+                onClick={() => {
+                  setIsZoomed(false);
+                  setZoomLevel(1);
+                  setImage(null);
+                }}
+                aria-label="Close image viewer"
+              >
+                ✕
+              </button>
+
+              {/* Navigation arrows */}
+              <button
+                className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-3 text-white text-3xl select-none hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
+                onClick={() => sliderbtn("left")}
+                aria-label="Previous image"
+              >
+                ←
+              </button>
+
+              <button
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-3 text-white text-3xl select-none hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
+                onClick={() => sliderbtn("right")}
+                aria-label="Next image"
+              >
+                →
+              </button>
+
+              {/* Image area */}
+              <div
+                ref={containerRef}
+                className={`w-full h-full ${isZoomed
+                  ? "overflow-auto cursor-grab active:cursor-grabbing"
+                  : "flex justify-center items-center"
+                  }`}
+                onClick={(e) => e.stopPropagation()}
+                onMouseDown={handleMouseDown}
+                onMouseMove={handleMouseMove}
+                onMouseUp={endDrag}
+                onMouseLeave={endDrag}
+                onWheel={handleWheel}
+                onTouchStart={handleTouchStart}
+                onTouchMove={handleTouchMove}
+              >
+                <img
+                  ref={imageRef}
+                  src={images[image]}
+                  alt="Full Screen"
+                  className={
+                    isZoomed
+                      ? "max-w-none max-h-none w-auto h-auto"
+                      : "max-w-full max-h-full object-contain"
+                  }
+                  style={{
+                    transform: isZoomed ? `scale(${zoomLevel})` : 'scale(1)',
+                    transformOrigin: 'center center',
+                    transition: isZoomed ? 'none' : 'transform 0.2s ease'
                   }}
-                  aria-label="Close image viewer"
-                >
-                  ✕
-                </button>
+                  onClick={() => {
+                    if (zoomLevel === 1) {
+                      setZoomLevel(1.5);
+                      setIsZoomed(true);
+                    } else {
+                      setZoomLevel(1);
+                      setIsZoomed(false);
+                    }
+                  }}
+                />
               </div>
 
-              {/* Image container */}
-              <div className="flex-1 relative overflow-hidden">
-                {/* Navigation arrows */}
-                <button
-                  className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-2 text-white text-2xl select-none hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
-                  onClick={() => sliderbtn("left")}
-                  aria-label="Previous image"
-                >
-                  ←
-                </button>
-
-                <button
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-2 text-white text-2xl select-none hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
-                  onClick={() => sliderbtn("right")}
-                  aria-label="Next image"
-                >
-                  →
-                </button>
-
-                {/* Image area */}
-                <div
-                  ref={containerRef}
-                  className={`w-full h-full ${isZoomed
-                    ? "overflow-auto cursor-grab active:cursor-grabbing"
-                    : "flex justify-center items-center"
-                    }`}
-                  onClick={(e) => e.stopPropagation()}
-                  onMouseDown={handleMouseDown}
-                  onMouseMove={handleMouseMove}
-                  onMouseUp={endDrag}
-                  onMouseLeave={endDrag}
-                  onWheel={handleWheel}
-                  onTouchStart={handleTouchStart}
-                  onTouchMove={handleTouchMove}
-                >
-                  <img
-                    ref={imageRef}
-                    src={images[image]}
-                    alt="Full Screen"
-                    className={
-                      isZoomed
-                        ? "max-w-none max-h-none w-auto h-auto"
-                        : "max-w-full max-h-full object-contain"
-                    }
-                    style={{
-                      transform: isZoomed ? `scale(${zoomLevel})` : 'scale(1)',
-                      transformOrigin: 'center center',
-                      transition: isZoomed ? 'none' : 'transform 0.2s ease'
-                    }}
-                    onClick={() => {
-                      if (zoomLevel === 1) {
-                        setZoomLevel(2);
-                        setIsZoomed(true);
-                      } else {
-                        setZoomLevel(1);
-                        setIsZoomed(false);
-                      }
-                    }}
-                  />
-                </div>
-
-                {/* Image counter */}
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-3 py-1 rounded text-sm">
-                  {image + 1} / {images.length}
-                </div>
+              {/* Image counter */}
+              <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-3 py-1 rounded text-sm">
+                {image + 1} / {images.length}
               </div>
             </div>
           </div>
