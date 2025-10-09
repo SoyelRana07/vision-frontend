@@ -61,7 +61,11 @@ function Slider({ images }) {
   // Drag to pan when zoomed
   const handleMouseDown = (e) => {
     if (!isZoomed || !containerRef.current) return;
+    // Don't start drag if clicking on the image itself
+    if (e.target === imageRef.current) return;
+
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(true);
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     scrollStartRef.current = {
@@ -73,6 +77,7 @@ function Slider({ images }) {
   const handleMouseMove = (e) => {
     if (!isDragging || !containerRef.current) return;
     e.preventDefault();
+    e.stopPropagation();
     const deltaX = e.clientX - dragStartRef.current.x;
     const deltaY = e.clientY - dragStartRef.current.y;
     containerRef.current.scrollTo({
@@ -81,7 +86,13 @@ function Slider({ images }) {
     });
   };
 
-  const endDrag = () => setIsDragging(false);
+  const endDrag = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setIsDragging(false);
+  };
 
   // Zoom functions
   const handleZoom = (delta, centerX = 0, centerY = 0) => {
@@ -110,7 +121,7 @@ function Slider({ images }) {
     c.scrollTo({ left, top });
   };
 
-  // Wheel zoom (Ctrl + wheel) and trackpad zoom
+  // Wheel zoom (Ctrl + wheel) only - no trackpad zoom to prevent conflicts
   const handleWheel = (e) => {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
@@ -119,15 +130,8 @@ function Slider({ images }) {
       const centerY = e.clientY - (rect?.top || 0);
       const delta = e.deltaY > 0 ? -0.1 : 0.1;
       handleZoom(delta, centerX, centerY);
-    } else if (e.deltaY !== 0 && Math.abs(e.deltaY) < 10) {
-      // Trackpad pinch zoom (small deltaY values)
-      e.preventDefault();
-      const rect = containerRef.current?.getBoundingClientRect();
-      const centerX = e.clientX - (rect?.left || 0);
-      const centerY = e.clientY - (rect?.top || 0);
-      const delta = e.deltaY > 0 ? -0.05 : 0.05;
-      handleZoom(delta, centerX, centerY);
     }
+    // Let normal scroll work for panning when zoomed
   };
 
   // Touch pinch zoom
@@ -226,6 +230,7 @@ function Slider({ images }) {
                 onMouseMove={handleMouseMove}
                 onMouseUp={endDrag}
                 onMouseLeave={endDrag}
+                onMouseOut={endDrag}
                 onWheel={handleWheel}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
@@ -269,6 +274,7 @@ function Slider({ images }) {
                     e.preventDefault();
                     e.stopPropagation();
                   }}
+                  onDragStart={(e) => e.preventDefault()}
                 />
               </div>
 
