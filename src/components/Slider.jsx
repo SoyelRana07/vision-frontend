@@ -8,6 +8,7 @@ function Slider({ images }) {
   const containerRef = useRef(null);
   const imageRef = useRef(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragStartTime, setDragStartTime] = useState(0);
   const dragStartRef = useRef({ x: 0, y: 0 });
   const scrollStartRef = useRef({ left: 0, top: 0 });
   const lastTouchDistance = useRef(0);
@@ -61,12 +62,11 @@ function Slider({ images }) {
   // Drag to pan when zoomed
   const handleMouseDown = (e) => {
     if (!isZoomed || !containerRef.current) return;
-    // Don't start drag if clicking on the image itself
-    if (e.target === imageRef.current) return;
 
     e.preventDefault();
     e.stopPropagation();
     setIsDragging(true);
+    setDragStartTime(Date.now());
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     scrollStartRef.current = {
       left: containerRef.current.scrollLeft,
@@ -259,20 +259,34 @@ function Slider({ images }) {
                   draggable={false}
                   onClick={(e) => {
                     e.stopPropagation();
-                    if (zoomLevel === 1) {
-                      setZoomLevel(1.25);
-                      setIsZoomed(true);
-                      // center after state update
-                      setTimeout(centerScrollToMiddle, 0);
-                    } else {
-                      setZoomLevel(1);
-                      setIsZoomed(false);
-                      setTimeout(centerScrollToMiddle, 0);
+                    // Only toggle zoom if it wasn't a drag (quick click)
+                    const clickDuration = Date.now() - dragStartTime;
+                    if (clickDuration < 200 && !isDragging) {
+                      if (zoomLevel === 1) {
+                        setZoomLevel(1.25);
+                        setIsZoomed(true);
+                        // center after state update
+                        setTimeout(centerScrollToMiddle, 0);
+                      } else {
+                        setZoomLevel(1);
+                        setIsZoomed(false);
+                        setTimeout(centerScrollToMiddle, 0);
+                      }
                     }
                   }}
                   onMouseDown={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
+                    // Start drag from image as well
+                    if (isZoomed && containerRef.current) {
+                      setIsDragging(true);
+                      setDragStartTime(Date.now());
+                      dragStartRef.current = { x: e.clientX, y: e.clientY };
+                      scrollStartRef.current = {
+                        left: containerRef.current.scrollLeft,
+                        top: containerRef.current.scrollTop,
+                      };
+                    }
                   }}
                   onDragStart={(e) => e.preventDefault()}
                 />
