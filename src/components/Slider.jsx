@@ -101,6 +101,14 @@ function Slider({ images }) {
     }
   };
 
+  const centerScrollToMiddle = () => {
+    if (!containerRef.current) return;
+    const c = containerRef.current;
+    const left = Math.max(0, (c.scrollWidth - c.clientWidth) / 2);
+    const top = Math.max(0, (c.scrollHeight - c.clientHeight) / 2);
+    c.scrollTo({ left, top });
+  };
+
   // Wheel zoom (Ctrl + wheel)
   const handleWheel = (e) => {
     if (e.ctrlKey || e.metaKey) {
@@ -229,11 +237,14 @@ function Slider({ images }) {
                   }}
                   onClick={() => {
                     if (zoomLevel === 1) {
-                      setZoomLevel(1.5);
+                      setZoomLevel(1.25);
                       setIsZoomed(true);
+                      // center after state update
+                      setTimeout(centerScrollToMiddle, 0);
                     } else {
                       setZoomLevel(1);
                       setIsZoomed(false);
+                      setTimeout(centerScrollToMiddle, 0);
                     }
                   }}
                 />
