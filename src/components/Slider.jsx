@@ -165,21 +165,13 @@ function Slider({ images }) {
               }
             }}
           >
-            <div className="flex items-center gap-4 w-full justify-center">
-              {/* Left arrow */}
-              <button
-                className="cursor-pointer p-5 text-white text-4xl select-none hover:bg-white/10 rounded-full transition-colors border-none bg-transparent"
-                onClick={() => sliderbtn("left")}
-                aria-label="Previous image"
-              >
-                ←
-              </button>
-
-              {/* Centered window */}
-              <div className="relative max-w-[90vw] max-h-[80vh] w-full h-full">
-                {/* Close button */}
+            {/* Small centered window */}
+            <div className="relative bg-white rounded-lg shadow-2xl max-w-[80vw] max-h-[70vh] w-[600px] h-[500px] flex flex-col">
+              {/* Header with close button */}
+              <div className="flex justify-between items-center p-4 border-b">
+                <h3 className="text-lg font-semibold text-gray-800">Image Viewer</h3>
                 <button
-                  className="absolute top-2 right-2 text-white text-3xl cursor-pointer p-2 hover:bg-white/10 rounded-full select-none transition-colors border-none bg-transparent z-10"
+                  className="text-gray-500 hover:text-gray-700 text-2xl cursor-pointer p-1 hover:bg-gray-100 rounded-full transition-colors border-none bg-transparent"
                   onClick={() => {
                     setIsZoomed(false);
                     setZoomLevel(1);
@@ -188,6 +180,26 @@ function Slider({ images }) {
                   aria-label="Close image viewer"
                 >
                   ✕
+                </button>
+              </div>
+
+              {/* Image container */}
+              <div className="flex-1 relative overflow-hidden">
+                {/* Navigation arrows */}
+                <button
+                  className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-2 text-white text-2xl select-none hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
+                  onClick={() => sliderbtn("left")}
+                  aria-label="Previous image"
+                >
+                  ←
+                </button>
+
+                <button
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 cursor-pointer p-2 text-white text-2xl select-none hover:bg-black/20 rounded-full transition-colors border-none bg-transparent"
+                  onClick={() => sliderbtn("right")}
+                  aria-label="Next image"
+                >
+                  →
                 </button>
 
                 {/* Image area */}
@@ -233,19 +245,10 @@ function Slider({ images }) {
                 </div>
 
                 {/* Image counter */}
-                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-3 py-1 rounded">
+                <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 text-white bg-black/50 px-3 py-1 rounded text-sm">
                   {image + 1} / {images.length}
                 </div>
               </div>
-
-              {/* Right arrow */}
-              <button
-                className="cursor-pointer p-5 text-white text-4xl select-none hover:bg-white/10 rounded-full transition-colors border-none bg-transparent"
-                onClick={() => sliderbtn("right")}
-                aria-label="Next image"
-              >
-                →
-              </button>
             </div>
           </div>
         )}
