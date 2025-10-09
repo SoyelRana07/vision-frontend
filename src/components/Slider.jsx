@@ -61,6 +61,8 @@ function Slider({ images }) {
   // Drag to pan when zoomed
   const handleMouseDown = (e) => {
     if (!isZoomed || !containerRef.current) return;
+    // Only start dragging if it's not a click on the image itself
+    if (e.target === imageRef.current) return;
     setIsDragging(true);
     dragStartRef.current = { x: e.clientX, y: e.clientY };
     scrollStartRef.current = {
@@ -109,7 +111,7 @@ function Slider({ images }) {
     c.scrollTo({ left, top });
   };
 
-  // Wheel zoom (Ctrl + wheel)
+  // Wheel zoom (Ctrl + wheel) and trackpad zoom
   const handleWheel = (e) => {
     if (e.ctrlKey || e.metaKey) {
       e.preventDefault();
@@ -117,6 +119,14 @@ function Slider({ images }) {
       const centerX = e.clientX - (rect?.left || 0);
       const centerY = e.clientY - (rect?.top || 0);
       const delta = e.deltaY > 0 ? -0.1 : 0.1;
+      handleZoom(delta, centerX, centerY);
+    } else if (e.deltaY !== 0 && Math.abs(e.deltaY) < 10) {
+      // Trackpad pinch zoom (small deltaY values)
+      e.preventDefault();
+      const rect = containerRef.current?.getBoundingClientRect();
+      const centerX = e.clientX - (rect?.left || 0);
+      const centerY = e.clientY - (rect?.top || 0);
+      const delta = e.deltaY > 0 ? -0.05 : 0.05;
       handleZoom(delta, centerX, centerY);
     }
   };
@@ -220,6 +230,7 @@ function Slider({ images }) {
                 onWheel={handleWheel}
                 onTouchStart={handleTouchStart}
                 onTouchMove={handleTouchMove}
+                style={{ userSelect: 'none' }}
               >
                 <img
                   ref={imageRef}
@@ -233,9 +244,12 @@ function Slider({ images }) {
                   style={{
                     transform: isZoomed ? `scale(${zoomLevel})` : 'scale(1)',
                     transformOrigin: 'center center',
-                    transition: isZoomed ? 'none' : 'transform 0.2s ease'
+                    transition: isZoomed ? 'none' : 'transform 0.2s ease',
+                    userSelect: 'none',
+                    pointerEvents: 'auto'
                   }}
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.stopPropagation();
                     if (zoomLevel === 1) {
                       setZoomLevel(1.25);
                       setIsZoomed(true);
@@ -247,6 +261,7 @@ function Slider({ images }) {
                       setTimeout(centerScrollToMiddle, 0);
                     }
                   }}
+                  onMouseDown={(e) => e.stopPropagation()}
                 />
               </div>
 
