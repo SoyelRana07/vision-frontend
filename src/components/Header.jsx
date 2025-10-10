@@ -21,8 +21,8 @@ function Header() {
   const categories = useCategory();
   const { cart } = useCart();
   const topLevel = buildCategoryTree(categories);
-  const displayedCategories = topLevel.slice(0, 4);
-  const overflowCategories = topLevel.slice(4);
+  const displayedCategories = topLevel.slice(0, 3);
+  const overflowCategories = topLevel.slice(3);
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownTimeoutRef = React.useRef(null);
@@ -117,8 +117,8 @@ function Header() {
               </div>
             )}
           </div>
-          <Link to="/about-us" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">About Us</Link>
-          <Link to="/blogs" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">Blogs</Link>
+          <Link to="/about-us" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">About Us</Link>
+          <Link to="/blogs" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">Blogs</Link>
         </nav>
         {/* Desktop Search/Cart/Auth */}
         <div className="hidden lg:flex items-center gap-2 xl:gap-4 flex-shrink-0 ml-4">
