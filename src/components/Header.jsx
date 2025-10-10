@@ -22,6 +22,7 @@ function Header() {
   const { cart } = useCart();
   const topLevel = buildCategoryTree(categories);
   const displayedCategories = topLevel.slice(0, 4);
+  const overflowCategories = topLevel.slice(4);
   const [openSubMenus, setOpenSubMenus] = useState({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const dropdownTimeoutRef = React.useRef(null);
@@ -89,7 +90,33 @@ function Header() {
               )}
             </div>
           ))}
-          <Link to="/category" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">All Categories</Link>
+          {/* All Categories dropdown to contain overflow categories */}
+          <div className="relative group">
+            <Link
+              to="/category"
+              className="hover:text-red-600 flex items-center gap-1 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap"
+            >
+              All Categories
+              {overflowCategories.length > 0 && (
+                <span className="text-xs ml-1 text-gray-500">▼</span>
+              )}
+            </Link>
+            {overflowCategories.length > 0 && (
+              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 min-w-[220px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto z-50 max-h-[70vh] overflow-y-auto">
+                <div className="py-2">
+                  {overflowCategories.map((cat, index) => (
+                    <Link
+                      key={cat.slug}
+                      to={`/category/${cat.slug}`}
+                      className={`block px-4 py-2.5 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150 ${index !== overflowCategories.length - 1 ? "border-b border-gray-100" : ""}`}
+                    >
+                      {cat.name}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
           <Link to="/about-us" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">About Us</Link>
           <Link to="/blogs" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">Blogs</Link>
         </nav>
@@ -121,9 +148,8 @@ function Header() {
                 <span className="font-semibold text-red-600">{auth.user.name}</span>
                 {/* Triangle rotates based on dropdownOpen */}
                 <span
-                  className={`text-gray-500 transition-transform duration-200 ${
-                    dropdownOpen ? "rotate-180" : ""
-                  }`}
+                  className={`text-gray-500 transition-transform duration-200 ${dropdownOpen ? "rotate-180" : ""
+                    }`}
                   style={{ display: "inline-block" }}
                 >
                   ▼
