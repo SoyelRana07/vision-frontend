@@ -6,27 +6,3 @@
   padding: 0;
   margin: 0;
 }
-
-html,
-body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-body {
-  overflow-y: auto;
-}
-
-/* Fix for admin panel scrolling */
-.admin-container {
-  min-height: 100vh;
-  overflow-y: auto;
-}
-
-/* Ensure proper scrolling on mobile */
-@media (max-width: 768px) {
-  body {
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-}
