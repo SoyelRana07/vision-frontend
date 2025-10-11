@@ -17,6 +17,21 @@ export const normalizePhotoData = (photo) => {
     }
 
     if (typeof photo === 'string') {
+        // Handle JSON string arrays like '["url1", "url2"]'
+        if (photo.startsWith('[') && photo.endsWith(']')) {
+            try {
+                const parsed = JSON.parse(photo);
+                if (Array.isArray(parsed)) {
+                    const result = parsed.filter(url => url && typeof url === 'string' && url.trim());
+                    console.log('normalizePhotoData JSON array result:', result);
+                    return result;
+                }
+            } catch (e) {
+                console.log('Failed to parse JSON array:', e);
+            }
+        }
+
+        // Handle comma-separated URLs
         if (photo.includes(',')) {
             const result = photo.split(',')
                 .map(url => url.trim())
@@ -24,6 +39,8 @@ export const normalizePhotoData = (photo) => {
             console.log('normalizePhotoData comma-separated result:', result);
             return result;
         }
+
+        // Single URL
         const result = [photo];
         console.log('normalizePhotoData single string result:', result);
         return result;
