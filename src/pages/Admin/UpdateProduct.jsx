@@ -7,6 +7,7 @@ import { useAuth } from "../../context/auth";
 import { Select } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import UploadWidget from "./../../components/UploadWidget";
+import { normalizePhotoData } from "../../utils/photoUtils";
 
 const { Option } = Select;
 
@@ -43,8 +44,8 @@ function UpdateProduct() {
       setBulkDiscounts(data.product.bulkDiscounts && data.product.bulkDiscounts.length > 0 ? data.product.bulkDiscounts : [{ quantity: '', discount: '' }]);
 
       // Set existing photos if they exist
-      if (data.product?.photo && Array.isArray(data.product.photo)) {
-        setPhoto(data.product.photo);
+      if (data.product?.photo) {
+        setPhoto(normalizePhotoData(data.product.photo));
       }
     } catch (error) {
       console.error("Error loading product:", error);
