@@ -167,16 +167,32 @@ function UpdateProduct() {
           <div>
             <label className="block mb-2">Upload Photo</label>
           </div>
-          <div className="sideContainer flex-1 h-[300px] bg-gray-50 p-6 flex items-center gap-6">
-            {photo &&
-              photo.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt=""
-                  className="w-48 h-36 rounded-md object-cover shadow-md"
-                />
-              ))}
+          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 bg-gray-50">
+            <div className="flex flex-wrap gap-4 mb-4">
+              {photo && photo.length > 0 ? (
+                photo.map((image, index) => (
+                  <div key={index} className="relative">
+                    <img
+                      src={image}
+                      alt={`Product ${index + 1}`}
+                      className="w-32 h-24 rounded-md object-cover shadow-md"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newPhotos = photo.filter((_, i) => i !== index);
+                        setPhoto(newPhotos);
+                      }}
+                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm hover:bg-red-600"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <div className="text-gray-500 text-sm">No images uploaded</div>
+              )}
+            </div>
             <UploadWidget
               uwConfig={{
                 multiple: true,
