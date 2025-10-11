@@ -6,14 +6,19 @@
  * @returns {string[]} Array of photo URLs
  */
 export const normalizePhotoData = (photo) => {
+    console.log('normalizePhotoData input:', photo, 'type:', typeof photo);
+
     // Handle null, undefined, or empty values
     if (!photo || photo === null || photo === undefined) {
+        console.log('normalizePhotoData: empty input, returning []');
         return [];
     }
 
     // Handle arrays
     if (Array.isArray(photo)) {
-        return photo.filter(url => url && typeof url === 'string' && url.trim());
+        const result = photo.filter(url => url && typeof url === 'string' && url.trim());
+        console.log('normalizePhotoData: array input, result:', result);
+        return result;
     }
 
     // Handle strings
@@ -23,7 +28,9 @@ export const normalizePhotoData = (photo) => {
             try {
                 const parsed = JSON.parse(photo);
                 if (Array.isArray(parsed)) {
-                    return parsed.filter(url => url && typeof url === 'string' && url.trim());
+                    const result = parsed.filter(url => url && typeof url === 'string' && url.trim());
+                    console.log('normalizePhotoData: JSON array string, result:', result);
+                    return result;
                 }
             } catch (e) {
                 console.log('Failed to parse JSON array:', e);
@@ -32,16 +39,20 @@ export const normalizePhotoData = (photo) => {
 
         // Handle comma-separated URLs
         if (photo.includes(',')) {
-            return photo.split(',')
+            const result = photo.split(',')
                 .map(url => url.trim())
                 .filter(url => url);
+            console.log('normalizePhotoData: comma-separated string, result:', result);
+            return result;
         }
 
         // Single URL
+        console.log('normalizePhotoData: single URL string, result:', [photo]);
         return [photo];
     }
 
     // Fallback for any other type
+    console.log('normalizePhotoData: unknown type, returning []');
     return [];
 };
 
@@ -53,7 +64,9 @@ export const normalizePhotoData = (photo) => {
 export const getFirstPhoto = (photo) => {
     try {
         const normalized = normalizePhotoData(photo);
-        return normalized.length > 0 ? normalized[0] : null;
+        const result = normalized.length > 0 ? normalized[0] : null;
+        console.log('getFirstPhoto result:', result);
+        return result;
     } catch (error) {
         console.error('Error getting first photo:', error);
         return null;
