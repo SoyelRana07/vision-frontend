@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useCart } from "../context/CartContext";
+import { getFirstPhoto } from "../utils/photoUtils";
 
 function Cart() {
   const [auth] = useAuth();
@@ -125,9 +126,12 @@ function Cart() {
                   >
                     {/* Image Section */}
                     <img
-                      src={item.photo[0].split(",")[0]}
+                      src={getFirstPhoto(item.photo) || '/placeholder-image.png'}
                       alt={item.name}
                       className="w-28 h-28 object-cover mb-4 sm:mb-0 sm:mr-4"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                      }}
                     />
 
                     {/* Product Info */}

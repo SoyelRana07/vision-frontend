@@ -4,6 +4,7 @@ import AdminMenu from "./AdminMenu";
 import axios from "axios";
 import { useAuth } from "../../context/auth";
 import { NavLink } from "react-router-dom";
+import { getFirstPhoto } from "../../utils/photoUtils";
 
 function Products() {
   const [products, setProducts] = useState([]);
@@ -50,17 +51,25 @@ function Products() {
                 key={p._id}
               >
                 <figure className="relative">
-                  {p.photo && Array.isArray(p.photo) && p.photo[0] ? (
-                    <img
-                      src={p.photo[0].split(",")[0]}
-                      alt={p.name}
-                      className="w-full h-56 object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500">No Image Available</span>
-                    </div>
-                  )}
+                  {(() => {
+                    const imageUrl = getFirstPhoto(p.photo);
+
+                    return imageUrl ? (
+                      <img
+                        src={imageUrl}
+                        alt={p.name}
+                        className="w-full h-56 object-cover"
+                        onError={(e) => {
+                          console.error('Image failed to load:', imageUrl);
+                          e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-500">No Image Available</span>
+                      </div>
+                    );
+                  })()}
                 </figure>
 
                 <div className="p-4">

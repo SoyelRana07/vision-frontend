@@ -6,6 +6,7 @@ import Meta from "antd/es/card/Meta";
 import { Button, Modal } from "antd";
 import { useCart } from "../context/CartContext";
 import useCategory from "../hooks/useCategory";
+import { getFirstPhoto } from "../utils/photoUtils";
 
 function CategoryProduct() {
   const params = useParams();
@@ -138,8 +139,11 @@ function CategoryProduct() {
                   <div className="h-48 overflow-hidden">
                     <img
                       alt={p.name}
-                      src={p.photo[0].split(",")[0]}
+                      src={getFirstPhoto(p.photo) || '/placeholder-image.png'}
                       className="w-full h-full object-contain"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjNmNGY2Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzk5YTNhZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                      }}
                     />
                   </div>
                 }

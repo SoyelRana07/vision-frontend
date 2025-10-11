@@ -5,6 +5,7 @@ import { Button, Card, Modal } from "antd";
 import toast from "react-hot-toast";
 import Slider from "./../components/Slider";
 import { useCart } from "../context/CartContext";
+import { normalizePhotoData } from "../utils/photoUtils";
 
 const { Meta } = Card;
 
@@ -63,7 +64,7 @@ function DetailedProduct() {
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };
@@ -130,7 +131,7 @@ function DetailedProduct() {
       <h1 className="text-5xl font-semibold">Product Details</h1>
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
         <div className="slider z-10">
-          <Slider images={prod.photo[0].split(",")} />
+          <Slider images={normalizePhotoData(prod.photo)} />
         </div>
         <div className="md:col-span-1">
           <h1 className="text-4xl font-serif font-bold">{prod.name}</h1>
