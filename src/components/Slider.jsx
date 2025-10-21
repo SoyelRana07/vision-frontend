@@ -304,12 +304,13 @@ function Slider({ images }) {
       </div>
 
       <div className="big w-[70%] cursor-pointer">
+        {images && images[0] &&(
         <img
           src={images[0]}
           className="rounded-lg w-full h-auto"
           alt="Main product"
           onClick={() => setImage(0)}
-        />
+        />)}
       </div>
       <div className="small flex flex-col gap-2 ml-2 w-[30%]">
         {images.slice(1).map((img, i) => (
