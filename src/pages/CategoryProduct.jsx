@@ -138,7 +138,7 @@ function CategoryProduct() {
                   <div className="h-48 overflow-hidden">
                     <img
                       alt={p.name}
-                      src={p.photo[0].split(",")[0]}
+                      src={p.photo[0]?.split(",")[0]}
                       className="w-full h-full object-contain"
                     />
                   </div>
