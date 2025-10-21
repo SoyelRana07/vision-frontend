@@ -23,9 +23,7 @@ function Header() {
   const topLevel = buildCategoryTree(categories);
   const displayedCategories = topLevel.slice(0, 3);
   const overflowCategories = topLevel.slice(3);
-  const [openSubMenus, setOpenSubMenus] = useState({});
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownTimeoutRef = React.useRef(null);
 
   const handleLogout = () => {
     setAuth({ ...auth, user: null, token: "" });
@@ -74,49 +72,18 @@ function Header() {
         <nav className="hidden lg:flex flex-1 justify-center items-center gap-4 xl:gap-8 2xl:gap-12 text-base xl:text-lg">
           <Link to="/" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">Home</Link>
           {displayedCategories.map((cat) => (
-            <div key={cat.slug} className="relative group">
-              <Link to={`/category/${cat.slug}`} className="hover:text-red-600 flex items-center gap-1 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">
-                {cat.name}
-                {cat.children?.length > 0 && <span className="text-xs ml-1 text-gray-500">▼</span>}
-              </Link>
-              {cat.children?.length > 0 && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 min-w-[200px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto z-50">
-                  <div className="py-2">
-                    {cat.children.map((child, index) => (
-                      <Link key={child.slug} to={`/category/${child.slug}`} className={`block px-4 py-2.5 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150 ${index !== cat.children.length - 1 ? "border-b border-gray-100" : ""}`}>{child.name}</Link>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-          {/* All Categories dropdown to contain overflow categories */}
-          <div className="relative group">
-            <Link
-              to="/category"
-              className="hover:text-red-600 flex items-center gap-1 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap"
+            <Link 
+              key={cat.slug}
+              to={`/category/${cat.slug}`} 
+              className="py-2 px-3 text-gray-700 whitespace-nowrap"
             >
-              All Categories
-              {overflowCategories.length > 0 && (
-                <span className="text-xs ml-1 text-gray-500">▼</span>
-              )}
+              {cat.name}
             </Link>
-            {overflowCategories.length > 0 && (
-              <div className="absolute left-1/2 -translate-x-1/2 top-full mt-2 min-w-[220px] bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-200 pointer-events-none group-hover:pointer-events-auto z-50 max-h-[70vh] overflow-y-auto">
-                <div className="py-2">
-                  {overflowCategories.map((cat, index) => (
-                    <Link
-                      key={cat.slug}
-                      to={`/category/${cat.slug}`}
-                      className={`block px-4 py-2.5 hover:bg-gray-50 hover:text-red-600 transition-colors duration-150 ${index !== overflowCategories.length - 1 ? "border-b border-gray-100" : ""}`}
-                    >
-                      {cat.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
+          ))}
+          {/* All Categories link */}
+          <Link to="/category" className="py-2 px-3 text-gray-700 whitespace-nowrap">
+            All Categories
+          </Link>
           <Link to="/about-us" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">About Us</Link>
           <Link to="/blogs" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">Blogs</Link>
         </nav>
@@ -210,19 +177,14 @@ function Header() {
             </div>
             <Link to="/" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>Home</Link>
             {displayedCategories.map((cat) => (
-              <div key={cat.slug} className="border-b border-gray-100 last:border-b-0">
-                <Link to={`/category/${cat.slug}`} className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200 flex items-center justify-between" onClick={() => setMenuOpen(false)}>
-                  {cat.name}
-                  {cat.children?.length > 0 && <span className="text-xs text-gray-500">▼</span>}
-                </Link>
-                {cat.children?.length > 0 && (
-                  <div className="ml-4 pb-2">
-                    {cat.children.map((child) => (
-                      <Link key={child.slug} to={`/category/${child.slug}`} className="block py-2 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200 text-sm text-gray-600" onClick={() => setMenuOpen(false)}>{child.name}</Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <Link 
+                key={cat.slug} 
+                to={`/category/${cat.slug}`} 
+                className="block py-3 px-2 text-gray-700 border-b border-gray-100 last:border-b-0"
+                onClick={() => setMenuOpen(false)}
+              >
+                {cat.name}
+              </Link>
             ))}
             <Link to="/category" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>All Categories</Link>
             <Link to="/about-us" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>About Us</Link>
