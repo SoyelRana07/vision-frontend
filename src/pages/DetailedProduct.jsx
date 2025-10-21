@@ -130,7 +130,7 @@ function DetailedProduct() {
       <h1 className="text-5xl font-semibold">Product Details</h1>
       <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
         <div className="slider z-10">
-          <Slider images={prod.photo[0].split(",")} />
+          <Slider images={prod.photo[0]?.split(",")} />
         </div>
         <div className="md:col-span-1">
           <h1 className="text-4xl font-serif font-bold">{prod.name}</h1>
