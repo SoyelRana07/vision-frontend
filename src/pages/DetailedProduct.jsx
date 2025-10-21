@@ -259,12 +259,7 @@ function DetailedProduct() {
                 hoverable
                 style={{ width: 300 }}
                 className="m-3 p-2"
-                cover={
-                  <img
-                    alt={p.name}
-                    src={`https://vision-backend-lx5i.onrender.com/api/v1/product/product-photo/${p._id}`}
-                  />
-                }
+                cover={p.photo[0] && <img alt={p.name} src={p.photo[0]}></img>}
               >
                 <Meta title={p.name} description={p.description} />
                 <div className="card-name-price mt-3">
