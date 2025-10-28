@@ -32,7 +32,7 @@ function UpdateProduct() {
           headers: { Authorization: `Bearer ${auth?.token}` },
         }
       );
-
+      console.log(data.product);
       setName(data.product?.name);
       setCategory(data.product?.category?._id);
       setDescription(data.product.description);
@@ -40,6 +40,23 @@ function UpdateProduct() {
       setQuantity(data.product.quantity);
       setShipping(data.product.shipping);
       setId(data.product._id);
+      // Normalize existing photos: backend may return ["url1,url2,..."] or ["url1","url2"]
+      try {
+        const rawPhoto = data.product.photo;
+        let normalized = [];
+        if (Array.isArray(rawPhoto)) {
+          if (rawPhoto.length === 1 && typeof rawPhoto[0] === "string" && rawPhoto[0].includes(",")) {
+            normalized = rawPhoto[0].split(",").map((s) => s.trim()).filter(Boolean);
+          } else {
+            normalized = rawPhoto.filter(Boolean);
+          }
+        } else if (typeof rawPhoto === "string") {
+          normalized = rawPhoto.split(",").map((s) => s.trim()).filter(Boolean);
+        }
+        setPhoto(normalized);
+      } catch (_) {
+        setPhoto([]);
+      }
       setBulkDiscounts(data.product.bulkDiscounts && data.product.bulkDiscounts.length > 0 ? data.product.bulkDiscounts : [{ quantity: '', discount: '' }]);
     } catch (error) {
       console.error("Error loading product:", error);
@@ -170,12 +187,21 @@ function UpdateProduct() {
           <div className="sideContainer flex-1 h-[300px] bg-gray-50 p-6 flex items-center gap-6">
             {photo &&
               photo.map((image, index) => (
-                <img
-                  key={index}
-                  src={image}
-                  alt=""
-                  className="w-48 h-36 rounded-md object-cover shadow-md"
-                />
+                <div key={index} className="relative">
+                  <img
+                    src={image}
+                    alt=""
+                    className="w-48 h-36 rounded-md object-cover shadow-md"
+                  />
+                  <button
+                    type="button"
+                    className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center"
+                    onClick={() => setPhoto(photo.filter((_, i) => i !== index))}
+                    aria-label="Remove image"
+                  >
+                    ×
+                  </button>
+                </div>
               ))}
             <UploadWidget
               uwConfig={{
