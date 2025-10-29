@@ -15,7 +15,7 @@ function PaymentCallback() {
 
         if (orderId) {
             setIsLoading(true);
-            axios.get(`https://vision-backend-lx5i.onrender.com/api/v1/payment/status?order_id=${orderId}`)
+            axios.get(`https://vision-backend-328443733915.asia-south2.run.app/api/v1/payment/status?order_id=${orderId}`)
                 .then(res => {
                     if (
                         res.data &&

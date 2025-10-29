@@ -27,7 +27,7 @@ function UpdateProduct() {
   const getSingleProduct = async () => {
     try {
       const { data } = await axios.get(
-        `https://vision-backend-lx5i.onrender.com/api/v1/product/get-product/${params.slug}`,
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/get-product/${params.slug}`,
         {
           headers: { Authorization: `Bearer ${auth?.token}` },
         }
@@ -71,7 +71,7 @@ function UpdateProduct() {
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        "https://vision-backend-lx5i.onrender.com/api/v1/category/get-category",
+        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/category/get-category",
         {
           headers: {
             Authorization: auth?.token,
@@ -112,7 +112,7 @@ function UpdateProduct() {
       productData.append("bulkDiscounts", JSON.stringify(bulkDiscounts.filter(b => b.quantity && b.discount)));
 
       const { data } = await axios.put(
-        `https://vision-backend-lx5i.onrender.com/api/v1/product/update-product/${id}`,
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/update-product/${id}`,
         productData,
         {
           headers: {
@@ -140,7 +140,7 @@ function UpdateProduct() {
       let answer = window.prompt("Are you sure, you want to delete");
       if (!answer) return;
       const { data } = await axios.delete(
-        `https://vision-backend-lx5i.onrender.com/api/v1/product/delete-product/${id}`,
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/delete-product/${id}`,
         {
           headers: {
             Authorization: auth?.token,

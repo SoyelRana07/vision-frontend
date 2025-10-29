@@ -18,7 +18,7 @@ function Login() {
     console.log({ email, password });
 
     try {
-      const res = await axios.post("https://vision-backend-lx5i.onrender.com/api/v1/auth/login", {
+      const res = await axios.post("https://vision-backend-328443733915.asia-south2.run.app/api/v1/auth/login", {
         email,
         password,
       });

@@ -10,7 +10,7 @@ function BlogDetail() {
     const getBlog = async () => {
         try {
             const { data } = await axios.get(
-                `https://vision-backend-lx5i.onrender.com/api/v1/blog/get-blog/${slug}`
+                `https://vision-backend-328443733915.asia-south2.run.app/api/v1/blog/get-blog/${slug}`
             );
             if (data.success) {
                 setBlog(data.blog);

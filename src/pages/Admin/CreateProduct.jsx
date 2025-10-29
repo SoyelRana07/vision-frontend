@@ -25,7 +25,7 @@ function CreateProduct() {
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        "https://vision-backend-lx5i.onrender.com/api/v1/category/get-category",
+        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/category/get-category",
         {
           headers: {
             Authorization: auth?.token,
@@ -66,7 +66,7 @@ function CreateProduct() {
       productData.append("bulkDiscounts", JSON.stringify(bulkDiscounts.filter(b => b.quantity && b.discount)));
 
       const { data } = await axios.post(
-        "https://vision-backend-lx5i.onrender.com/api/v1/product/create-product",
+        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/create-product",
         productData,
         {
           headers: {

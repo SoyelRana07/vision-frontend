@@ -18,7 +18,7 @@ function Blogs() {
     const getAllBlogs = async () => {
         try {
             setLoading(true);
-            const { data } = await axios.get("https://vision-backend-lx5i.onrender.com/api/v1/blog/get-blogs");
+            const { data } = await axios.get("https://vision-backend-328443733915.asia-south2.run.app/api/v1/blog/get-blogs");
             if (data.success) {
                 setBlogs(data.blogs);
                 setSearchResults(data.blogs); // Initialize search results with all blogs
@@ -42,7 +42,7 @@ function Blogs() {
             }
 
             const { data } = await axios.get(
-                `https://vision-backend-lx5i.onrender.com/api/v1/blog/search-blog/${value}`
+                `https://vision-backend-328443733915.asia-south2.run.app/api/v1/blog/search-blog/${value}`
             );
             if (data.success) {
                 setSearchResults(data.blogs);

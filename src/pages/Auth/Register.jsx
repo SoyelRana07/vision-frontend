@@ -20,7 +20,7 @@ function Register() {
       //const apiUrl = process.env.VITE_API_URL; ${apiUrl}
 
       const res = await axios.post(
-        "https://vision-backend-lx5i.onrender.com/api/v1/auth/register",
+        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/auth/register",
         {
           name,
           email,

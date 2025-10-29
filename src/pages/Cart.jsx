@@ -48,7 +48,7 @@ function Cart() {
       const amount = totalAmount; // Send as INR, do not convert
       // Set your backend callback URL as the return_url so the payment gateway POSTs to the backend, not the frontend
       // The backend will then redirect to the frontend callback page with order_id as a query param
-      const redirectUrl = "https://vision-backend-lx5i.onrender.com/api/v1/payment/hdfc/callback";
+      const redirectUrl = "https://vision-backend-328443733915.asia-south2.run.app/api/v1/payment/hdfc/callback";
       // Prepare product details for logging
       const products = cart.map(item => ({
         product_id: item._id,
@@ -59,7 +59,7 @@ function Cart() {
       console.log("Products to send:", products);
       // Call backend to initiate HDFC payment
       const res = await axios.post(
-        "https://vision-backend-lx5i.onrender.com/api/v1/payment/hdfc/initiate",
+        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/payment/hdfc/initiate",
         { amount, customer, orderId, redirectUrl, products },
         {
           headers: {

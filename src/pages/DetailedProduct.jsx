@@ -21,7 +21,7 @@ function DetailedProduct() {
   const getProducts = async () => {
     try {
       const { data } = await axios.get(
-        `https://vision-backend-lx5i.onrender.com/api/v1/product/get-product/${params.slug}`
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/get-product/${params.slug}`
       );
 
       if (data?.product) {
@@ -42,7 +42,7 @@ function DetailedProduct() {
   const getRelatedProducts = async (pid, cid) => {
     try {
       const { data } = await axios.get(
-        `https://vision-backend-lx5i.onrender.com/api/v1/product/related-product/${pid}/${cid}`
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/related-product/${pid}/${cid}`
       );
 
       if (data?.products) {
@@ -63,7 +63,7 @@ function DetailedProduct() {
     } else {
       document.body.style.overflow = 'unset';
     }
-    
+
     return () => {
       document.body.style.overflow = 'unset';
     };

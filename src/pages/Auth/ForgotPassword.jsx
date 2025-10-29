@@ -16,7 +16,7 @@ const ForgotPasssword = () => {
     try {
       //const port = process.env.VITE_API_URL;
       const res = await axios.post(
-        "https://vision-backend-lx5i.onrender.com/api/v1/auth/forgotPassword",
+        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/auth/forgotPassword",
         {
           email,
           newPassword,

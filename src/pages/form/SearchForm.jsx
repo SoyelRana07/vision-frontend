@@ -11,7 +11,7 @@ function SearchForm() {
     try {
       e.preventDefault();
       const { data } = await axios.get(
-        `https://vision-backend-lx5i.onrender.com/api/v1/product/search/${values.keyword}`
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/search/${values.keyword}`
       );
       setValues({ ...values, results: data });
       navigate("/search");
