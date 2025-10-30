@@ -6,6 +6,7 @@ import Meta from "antd/es/card/Meta";
 import { Button, Modal } from "antd";
 import Card from "antd/es/card/Card";
 import { toast } from "react-hot-toast";
+import { useCart } from "../context/CartContext";
 
 function Search() {
   const [values, setValues] = useSearch();
@@ -13,7 +14,7 @@ function Search() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [selectedProduct, setSelectedProduct] = React.useState(null);
-  const { addToCart } = require("../context/CartContext");
+ const { addToCart } = useCart();
   const [manualQty, setManualQty] = React.useState("");
   const [manualDiscount, setManualDiscount] = React.useState(0);
 
