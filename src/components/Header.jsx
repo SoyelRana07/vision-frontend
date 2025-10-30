@@ -21,7 +21,7 @@ function Header() {
   const categories = useCategory();
   const { cart } = useCart();
   const topLevel = buildCategoryTree(categories);
-  const displayedCategories = topLevel.slice(0, 3);
+  const displayedCategories = topLevel.slice(0, 2);
   const overflowCategories = topLevel.slice(3);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
