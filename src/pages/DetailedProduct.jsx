@@ -124,6 +124,8 @@ function DetailedProduct() {
     });
   };
   const bulkOptions = getBulkOptions();
+  console.log("relatedProducts:", relatedProducts);
+  console.log("relatedProducts (final render):", relatedProducts.map(p => p.photo));
 
   return (
     <div className="text-center">
@@ -178,7 +180,7 @@ function DetailedProduct() {
           </div>
           <Button
             type="default"
-            className="ml-2 mt-5"
+            className="ml-2 mt-5 mb-5 mr-3"
             onClick={() => setIsModalOpen(true)}
           >
             Add to Cart
@@ -247,7 +249,7 @@ function DetailedProduct() {
             </div>
           </Modal>
         </div>
-        <div className="md:col-span-2 text-4xl font-serif mt-10 mb-11">
+        {/* <div className="md:col-span-2 text-4xl font-serif mt-10 mb-11">
           Related Products
           <div>
             <h1 className="text-xl font-serif font-bold">
@@ -261,7 +263,7 @@ function DetailedProduct() {
                 className="m-3 p-2"
                 cover={p.photo[0] && <img alt={p.name} src={p.photo[0]}></img>}
               >
-                <Meta title={p.name} description={p.description} />
+                <Meta title={p.name} description={null} />
                 <div className="card-name-price mt-3">
                   <h5 className="card-title">
                     {p.price.toLocaleString("en-US", {
@@ -295,7 +297,7 @@ function DetailedProduct() {
               </Card>
             ))}
           </div>
-        </div>
+        </div> */}
       </div>
     </div>
   );
