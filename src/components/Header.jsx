@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import logo from "../assets/logo.png";
 import { useAuth } from "../context/auth";
 import useCategory from "./../hooks/useCategory";
@@ -24,6 +24,30 @@ function Header() {
   const displayedCategories = topLevel.slice(0, 2);
   const overflowCategories = topLevel.slice(3);
   const [dropdownOpen, setDropdownOpen] = useState(false);
+  const location = useLocation();
+  const currentPath = location.pathname;
+
+  // Function to check if a nav item is active
+  const isActive = (path) => {
+    // Special case for home
+    if (path === '/' && currentPath === '/') return true;
+    // For category pages
+    if (path.startsWith('/category') && currentPath.startsWith('/category/')) {
+      if (path === '/category') return currentPath === '/category';
+      return currentPath === path;
+    }
+    // For other pages
+    return currentPath === path;
+  };
+
+  // Get the appropriate class for a nav link
+  const getNavLinkClass = (path) => {
+    const baseClasses = 'py-2 px-3 rounded-md transition-colors duration-200 whitespace-nowrap';
+    const activeClasses = isActive(path) 
+      ? 'text-red-600 font-medium bg-red-50' 
+      : 'text-gray-700 hover:text-red-600 hover:bg-gray-50';
+    return `${baseClasses} ${activeClasses}`;
+  };
 
   const handleLogout = () => {
     setAuth({ ...auth, user: null, token: "" });
@@ -69,23 +93,37 @@ function Header() {
           </Link>
         </div>
         {/* Desktop Nav */}
-        <nav className="hidden lg:flex flex-1 justify-center items-center gap-4 xl:gap-8 2xl:gap-12 text-base xl:text-lg">
-          <Link to="/" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50">Home</Link>
+        <nav className="hidden lg:flex flex-1 justify-center items-center gap-4 xl:gap-6 2xl:gap-8 text-base xl:text-[16px] 2xl:text-[17px]">
+          <Link to="/" className={getNavLinkClass('/')}>
+            Home
+          </Link>
           {displayedCategories.map((cat) => (
-            <Link 
+            <Link
               key={cat.slug}
-              to={`/category/${cat.slug}`} 
-              className="py-2 px-3 text-gray-700 whitespace-nowrap"
+              to={`/category/${cat.slug}`}
+              className={getNavLinkClass(`/category/${cat.slug}`)}
             >
               {cat.name}
             </Link>
           ))}
-          {/* All Categories link */}
-          <Link to="/category" className="py-2 px-3 text-gray-700 whitespace-nowrap">
+          <Link 
+            to="/category" 
+            className={getNavLinkClass('/category')}
+          >
             All Categories
           </Link>
-          <Link to="/about-us" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">About Us</Link>
-          <Link to="/blogs" className="hover:text-red-600 py-2 px-3 rounded-md transition-colors duration-200 hover:bg-gray-50 whitespace-nowrap">Blogs</Link>
+          <Link 
+            to="/about-us" 
+            className={getNavLinkClass('/about-us')}
+          >
+            About Us
+          </Link>
+          <Link 
+            to="/blogs" 
+            className={getNavLinkClass('/blogs')}
+          >
+            Blogs
+          </Link>
         </nav>
         {/* Desktop Search/Cart/Auth */}
         <div className="hidden lg:flex items-center gap-2 xl:gap-4 flex-shrink-0 ml-4">
@@ -175,20 +213,44 @@ function Header() {
                 </div>
               )}
             </div>
-            <Link to="/" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>Home</Link>
+            <Link 
+              to="/" 
+              className={`block py-3 px-2 rounded-md ${currentPath === '/' ? 'text-red-600 font-medium bg-red-50' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              Home
+            </Link>
             {displayedCategories.map((cat) => (
-              <Link 
-                key={cat.slug} 
-                to={`/category/${cat.slug}`} 
-                className="block py-3 px-2 text-gray-700 border-b border-gray-100 last:border-b-0"
+              <Link
+                key={cat.slug}
+                to={`/category/${cat.slug}`}
+                className={`block py-3 px-2 border-b border-gray-100 last:border-b-0 ${currentPath === `/category/${cat.slug}` ? 'text-red-600 font-medium bg-red-50' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'}`}
                 onClick={() => setMenuOpen(false)}
               >
                 {cat.name}
               </Link>
             ))}
-            <Link to="/category" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>All Categories</Link>
-            <Link to="/about-us" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>About Us</Link>
-            <Link to="/blogs" className="py-3 px-2 hover:text-red-600 hover:bg-gray-50 rounded-md transition-colors duration-200" onClick={() => setMenuOpen(false)}>Blogs</Link>
+            <Link 
+              to="/category" 
+              className={`block py-3 px-2 rounded-md ${currentPath === '/category' ? 'text-red-600 font-medium bg-red-50' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              All Categories
+            </Link>
+            <Link 
+              to="/about-us" 
+              className={`block py-3 px-2 rounded-md ${currentPath === '/about-us' ? 'text-red-600 font-medium bg-red-50' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              About Us
+            </Link>
+            <Link 
+              to="/blogs" 
+              className={`block py-3 px-2 rounded-md ${currentPath === '/blogs' ? 'text-red-600 font-medium bg-red-50' : 'text-gray-700 hover:text-red-600 hover:bg-gray-50'}`}
+              onClick={() => setMenuOpen(false)}
+            >
+              Blogs
+            </Link>
           </div>
         </div>
       )}
