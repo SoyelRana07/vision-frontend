@@ -3,6 +3,7 @@ import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Toaster } from 'react-hot-toast';
 
 import HeroSection from "./assets/Components/Hero.jsx";
 import Header from "./components/Header.jsx";
@@ -47,6 +48,17 @@ import PaymentCallback from "./pages/PaymentCallback.jsx";
 function App() {
   return (
     <BrowserRouter>
+      <Toaster 
+        position="top-right"
+        toastOptions={{
+          style: {
+            background: '#4bb543',
+            color: '#fff',
+          },
+          duration: 2000,
+          icon: '🛒',
+        }}
+      />
       {/* Persistent Header */}
       <Header />
 

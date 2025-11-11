@@ -3,7 +3,8 @@ import axios from "axios";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
-import { Button, Modal } from "antd";
+import { Button, Modal, message } from "antd";
+import toast from "react-hot-toast";
 import { useCart } from "../context/CartContext";
 import useCategory from "../hooks/useCategory";
 
@@ -78,15 +79,23 @@ function CategoryProduct() {
     const perUnitPrice = variant.discount
       ? Math.round(selectedProduct.price * (1 - variant.discount / 100))
       : selectedProduct.price;
+    const quantity = variant.quantity || 1;
     const productToAdd = {
       ...selectedProduct,
       variant: variant.id,
       price: perUnitPrice,
-      quantity: variant.quantity || 1,
+      quantity: quantity,
       bulkDiscount: variant.discount || 0,
     };
     addToCart(productToAdd);
-    toast.success("Product added to Cart");
+    message.success({
+      content: `${quantity} x ${selectedProduct.name} added to cart`,
+      style: {
+        marginTop: '4rem', // Position below header
+        fontSize: '16px',
+      },
+      duration: 2,
+    });
     setIsModalOpen(false);
     setManualQty("");
     setManualDiscount(0);
