@@ -127,13 +127,14 @@ function CategoryProduct() {
           Found {products?.length} results
         </h1>
         <div className="">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 ">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {products?.map((p) => (
               <Card
                 key={p._id}
                 hoverable
                 style={{ width: 300 }}
-                className="m-3 p-2"
+                className="m-3 p-2 relative"
+                onClick={() => navigate(`/product/${p.slug}`)}
                 cover={
                   <div className="h-48 overflow-hidden">
                     <img
@@ -144,26 +145,32 @@ function CategoryProduct() {
                   </div>
                 }
               >
-                <Meta title={p.name} description={null} />
-                <div className="card-name-price mt-3">
-                  <h5 className="card-title">
-                    {p.price.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "INR",
-                    })}
-                  </h5>
+                <div className="pointer-events-none">
+                  <Meta title={p.name} description={null} />
+                  <div className="card-name-price mt-3">
+                    <h5 className="card-title">
+                      {p.price.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "INR",
+                      })}
+                    </h5>
+                  </div>
                 </div>
-                <div className="mt-3 flex">
+                <div className="mt-3 flex pointer-events-auto">
                   <Button
                     type="primary"
-                    onClick={() => navigate(`/product/${p.slug}`)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      navigate(`/product/${p.slug}`);
+                    }}
                   >
                     More Details
                   </Button>
                   <Button
                     type="default"
                     className="ml-2"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       setSelectedProduct(p);
                       setIsModalOpen(true);
                     }}
