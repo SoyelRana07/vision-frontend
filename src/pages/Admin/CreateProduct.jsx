@@ -8,6 +8,10 @@ import Layout from "./../../Layout";
 import AdminMenu from "./AdminMenu";
 import UploadWidget from "./../../components/UploadWidget";
 const { Option } = Select;
+// Prefer local backend when VITE_API_BASE is set; fallback to production URL
+const API_BASE =
+  import.meta.env.VITE_API_BASE ||
+  "https://vision-backend-328443733915.asia-south2.run.app";
 
 function CreateProduct() {
   const [auth] = useAuth();
@@ -19,13 +23,40 @@ function CreateProduct() {
   const [price, setPrice] = useState("");
   const [quantity, setQuantity] = useState("");
   const [shipping, setShipping] = useState("");
-  const [bulkDiscounts, setBulkDiscounts] = useState([{ quantity: '', discount: '' }]);
+  const [bulkDiscounts, setBulkDiscounts] = useState([
+    { quantity: "", discount: "" },
+  ]);
+  const [showSpecificationsTable, setShowSpecificationsTable] = useState(false);
+  const [specifications, setSpecifications] = useState({
+    brand: "",
+    manufacturer: "",
+    model: "",
+    colour: "",
+    material: "",
+    numberOfItems: "",
+    machineType: "",
+    controllerType: "",
+    controlMode: "",
+    includedComponents: "",
+    usageApplication: "",
+    temperatureRange: "",
+    timeRange: "",
+    power: "",
+    voltage: "",
+    transferSize: "",
+    transferPlateSaucerDia: "",
+    machineDimension: "",
+    machineWeight: "",
+    packingDimension: "",
+    packedItemWeight: "",
+  });
+  const [hiddenSpecFields, setHiddenSpecFields] = useState({});
 
   // Fetch categories from the API
   const getAllCategory = async () => {
     try {
       const { data } = await axios.get(
-        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/category/get-category",
+        `${API_BASE}/api/v1/category/get-category`,
         {
           headers: {
             Authorization: auth?.token,
@@ -63,15 +94,37 @@ function CreateProduct() {
       if (photo) {
         productData.append("photo", photo);
       }
-      productData.append("bulkDiscounts", JSON.stringify(bulkDiscounts.filter(b => b.quantity && b.discount)));
+      productData.append(
+        "bulkDiscounts",
+        JSON.stringify(bulkDiscounts.filter((b) => b.quantity && b.discount))
+      );
+      // Convert boolean to string for FormData
+      productData.append(
+        "showSpecificationsTable",
+        showSpecificationsTable ? "true" : "false"
+      );
+
+      // Only include specifications that are not hidden and have values
+      const filteredSpecs = {};
+      Object.entries(specifications).forEach(([key, value]) => {
+        if (!hiddenSpecFields[key] && value && value.trim() !== "") {
+          filteredSpecs[key] = value;
+        }
+      });
+      productData.append("specifications", JSON.stringify(filteredSpecs));
+
+      console.log("Sending product data:", {
+        showSpecificationsTable: showSpecificationsTable ? "true" : "false",
+        specifications: filteredSpecs,
+        hasSpecifications: Object.keys(filteredSpecs).length > 0,
+      });
 
       const { data } = await axios.post(
-        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/create-product",
+        `${API_BASE}/api/v1/product/create-product`,
         productData,
         {
           headers: {
             Authorization: auth?.token,
-            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -201,7 +254,7 @@ function CreateProduct() {
                     placeholder="Quantity (e.g. 10)"
                     className="border rounded p-1 w-1/2"
                     value={bd.quantity}
-                    onChange={e => {
+                    onChange={(e) => {
                       const arr = [...bulkDiscounts];
                       arr[idx].quantity = e.target.value;
                       setBulkDiscounts(arr);
@@ -214,17 +267,125 @@ function CreateProduct() {
                     placeholder="Discount %"
                     className="border rounded p-1 w-1/2"
                     value={bd.discount}
-                    onChange={e => {
+                    onChange={(e) => {
                       const arr = [...bulkDiscounts];
                       arr[idx].discount = e.target.value;
                       setBulkDiscounts(arr);
                     }}
                   />
-                  <button type="button" onClick={() => setBulkDiscounts(bulkDiscounts.filter((_, i) => i !== idx))} className="text-red-500">Remove</button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setBulkDiscounts(
+                        bulkDiscounts.filter((_, i) => i !== idx)
+                      )
+                    }
+                    className="text-red-500"
+                  >
+                    Remove
+                  </button>
                 </div>
               ))}
-              <button type="button" onClick={() => setBulkDiscounts([...bulkDiscounts, { quantity: '', discount: '' }])} className="text-blue-500">+ Add Bulk Discount</button>
+              <button
+                type="button"
+                onClick={() =>
+                  setBulkDiscounts([
+                    ...bulkDiscounts,
+                    { quantity: "", discount: "" },
+                  ])
+                }
+                className="text-blue-500"
+              >
+                + Add Bulk Discount
+              </button>
             </div>
+
+            {/* Specifications Section */}
+            <div className="border-t pt-4 mt-6">
+              <div className="flex items-center gap-2 mb-4">
+                <input
+                  type="checkbox"
+                  id="showSpecificationsTable"
+                  checked={showSpecificationsTable}
+                  onChange={(e) => setShowSpecificationsTable(e.target.checked)}
+                  className="w-4 h-4"
+                />
+                <label
+                  htmlFor="showSpecificationsTable"
+                  className="font-semibold text-lg"
+                >
+                  Show Specifications Table
+                </label>
+              </div>
+
+              {showSpecificationsTable && (
+                <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
+                  <p className="text-sm text-gray-600 mb-4">
+                    Fill in the specifications below. You can hide individual
+                    fields by unchecking them.
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Object.entries({
+                      brand: "Brand",
+                      manufacturer: "Manufacturer",
+                      model: "Model",
+                      colour: "Colour",
+                      material: "Material",
+                      numberOfItems: "Number of items",
+                      machineType: "Machine Type",
+                      controllerType: "Controller type",
+                      controlMode: "Control Mode",
+                      includedComponents: "Included Components",
+                      usageApplication: "Usage/Application",
+                      temperatureRange: "Temperature Range",
+                      timeRange: "Time Range",
+                      power: "Power",
+                      voltage: "Voltage",
+                      transferSize: "Transfer Size",
+                      transferPlateSaucerDia: "Transfer Plate/Saucer Dia",
+                      machineDimension: "Machine Dimension",
+                      machineWeight: "Machine Weight",
+                      packingDimension: "Packing Dimension",
+                      packedItemWeight: "Packed Item Weight",
+                    }).map(([key, label]) => (
+                      <div key={key} className="flex items-start gap-2">
+                        <input
+                          type="checkbox"
+                          checked={!hiddenSpecFields[key]}
+                          onChange={(e) => {
+                            setHiddenSpecFields({
+                              ...hiddenSpecFields,
+                              [key]: !e.target.checked,
+                            });
+                          }}
+                          className="mt-2 w-4 h-4"
+                        />
+                        <div className="flex-1">
+                          <label className="block text-sm font-medium mb-1">
+                            {label}
+                          </label>
+                          <input
+                            type="text"
+                            value={specifications[key] || ""}
+                            onChange={(e) =>
+                              setSpecifications({
+                                ...specifications,
+                                [key]: e.target.value,
+                              })
+                            }
+                            placeholder={`Enter ${label.toLowerCase()}`}
+                            className="w-full border rounded-lg p-2 text-sm"
+                            disabled={hiddenSpecFields[key]}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
             <div>
               <button
                 type="submit"
