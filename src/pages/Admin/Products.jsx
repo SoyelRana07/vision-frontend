@@ -8,11 +8,16 @@ import { NavLink } from "react-router-dom";
 function Products() {
   const [products, setProducts] = useState([]);
   const [auth] = useAuth();
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const limit = 10; // Number of products per page
 
   const getProducts = async () => {
     try {
+      setLoading(true);
       const { data } = await axios.get(
-        "https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/get-products",
+        `https://vision-backend-328443733915.asia-south2.run.app/api/v1/product/get-products?page=${page}&limit=${limit}`,
         {
           headers: {
             Authorization: `Bearer ${auth?.token}`,
@@ -21,17 +26,20 @@ function Products() {
       );
       if (data.success) {
         setProducts(data.products);
+        setTotal(data.total || data.products.length);
       } else {
         console.error(data.message);
       }
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getProducts();
-  }, []);
+  }, [page]);
 
   return (
     <div className="container mx-auto py-6">
@@ -43,45 +51,77 @@ function Products() {
           <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
             Products
           </h1>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products?.map((p) => (
-              <div
-                className="card bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
-                key={p._id}
-              >
-                <figure className="relative">
-                  {p.photo && Array.isArray(p.photo) && p.photo[0] ? (
-                    <img
-                      src={p.photo[0].split(",")[0]}
-                      alt={p.name}
-                      className="w-full h-56 object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
-                      <span className="text-gray-500">No Image Available</span>
-                    </div>
-                  )}
-                </figure>
-
-                <div className="p-4">
-                  <h2 className="text-lg font-semibold text-gray-800 truncate">
-                    {p.name}
-                  </h2>
-                  <p className="text-sm text-gray-600 mt-2 line-clamp-3">
-                    {p.description}
-                  </p>
-                  {auth?.user?.role === 1 && (
-                    <div className="mt-4 flex justify-end">
-                      <NavLink to={`/dashboard/admin/update-product/${p.slug}`}>
-                        <button className="btn btn-primary bg-red-500 rounded-md hover:bg-red-400 px-4 py-2 text-sm font-medium">
-                          Update
-                        </button>
-                      </NavLink>
-                    </div>
-                  )}
-                </div>
+          <div className="mb-6">
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-500"></div>
               </div>
-            ))}
+            ) : (
+              <>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  {products?.map((p) => (
+                    <div
+                      className="card bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
+                      key={p._id}
+                    >
+                      <figure className="relative">
+                        {p.photo && Array.isArray(p.photo) && p.photo[0] ? (
+                          <img
+                            src={p.photo[0].split(",")[0]}
+                            alt={p.name}
+                            className="w-full h-56 object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-56 bg-gray-200 flex items-center justify-center">
+                            <span className="text-gray-500">No Image Available</span>
+                          </div>
+                        )}
+                      </figure>
+
+                      <div className="p-4">
+                        <h2 className="text-lg font-semibold text-gray-800 truncate">
+                          {p.name}
+                        </h2>
+                        <p className="text-sm text-gray-600 mt-2 line-clamp-3">
+                          {p.description}
+                        </p>
+                        {auth?.user?.role === 1 && (
+                          <div className="mt-4 flex justify-end">
+                            <NavLink to={`/dashboard/admin/update-product/${p.slug}`}>
+                              <button className="btn btn-primary bg-red-500 rounded-md hover:bg-red-400 px-4 py-2 text-sm font-medium">
+                                Update
+                              </button>
+                            </NavLink>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {total > limit && (
+                  <div className="flex justify-center mt-8 space-x-2">
+                    <button
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page === 1}
+                      className={`px-4 py-2 rounded-md ${page === 1 ? 'bg-gray-200 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600 text-white'}`}
+                    >
+                      Previous
+                    </button>
+                    <span className="px-4 py-2 bg-gray-100 rounded-md">
+                      Page {page} of {Math.ceil(total / limit)}
+                    </span>
+                    <button
+                      onClick={() => setPage((p) => p + 1)}
+                      disabled={page >= Math.ceil(total / limit)}
+                      className={`px-4 py-2 rounded-md ${page >= Math.ceil(total / limit) ? 'bg-gray-200 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600 text-white'}`}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
